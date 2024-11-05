@@ -13,11 +13,17 @@
     "cloudinary-build-url": "^0.2.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "gray-matter": "^4.0.3",
+    "mdx-bundler": "^10.0.3",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "react-icons": "^5.3.0",
-    "reading-time": "^1.5.0"
+    "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-prism-plus": "^2.0.0",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
