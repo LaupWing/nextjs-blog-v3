@@ -31,23 +31,7 @@ export const Button: FC<ButtonProps> = ({
     const classNameComputed = clsx(
         "rounded font-bold px-4 scale-100 bg-light dark:bg-dark text-gray-600 disabled:bg-gray-200 dark:text-gray-200 dark:disabled:bg-gray-700 ",
         variants[variant],
-        className,
-    )
-
-    const ButtonComponent = href ? (
-        <UnstyledLink href={href}>
-            <button
-                {...props}
-                disabled={disabled}
-                className={classNameComputed}
-            >
-                {children}
-            </button>
-        </UnstyledLink>
-    ) : (
-        <button {...props} disabled={disabled} className={classNameComputed}>
-            {children}
-        </button>
+        className
     )
 
     return variant === "gradient-animation" ? (
