@@ -22,9 +22,9 @@ export default async function Home() {
             <HomeIntro />
             <ContactMe />
             <HomeBlogs />
-            {/* <HomeProjects /> */}
-            {/* <HomeLibrary /> */}
-            {/* <Subscribe /> */}
+            <HomeProjects />
+            <HomeLibrary />
+            <Subscribe />
         </main>
     )
 }
