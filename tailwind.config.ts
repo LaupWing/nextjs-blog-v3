@@ -34,6 +34,7 @@ const config: Config = {
     },
     plugins: [
         require("@tailwindcss/forms"),
+        require("tailwindcss-animate"),
         require("@tailwindcss/typography"),
     ],
     darkMode: "class",
