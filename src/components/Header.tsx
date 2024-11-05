@@ -1,44 +1,19 @@
 "use client"
-import {
-    useParams,
-    usePathname,
-    useRouter,
-    useSelectedLayoutSegment,
-} from "next/navigation"
+import { useSelectedLayoutSegment } from "next/navigation"
 import { FC, useEffect, useState } from "react"
 import clsx from "clsx"
 import { UnstyledLink } from "./links/UnstyledLink.client"
 import { ThemeButton } from "./buttons/ThemeButton.client"
-import { SortListBox, SortOption } from "./elements/SortListBox.client"
-import { IconBike, IconClose, IconEarth, IconMenu } from "./Icons"
+import { IconClose, IconMenu } from "./Icons"
 
 interface HeaderProps {
     large?: boolean
 }
 
-const sortOptions: Array<SortOption> = [
-    {
-        id: "en",
-        name: "EN",
-        icon: IconEarth,
-    },
-    {
-        id: "nl",
-        name: "NL",
-        icon: IconBike,
-    },
-]
-
 export const Header: FC<HeaderProps> = () => {
     const [onTop, setOnTop] = useState<boolean>(false)
     const activeSegment = useSelectedLayoutSegment()
-    const params = useParams()
-    const pathname = usePathname()
-    const [sortOrder] = useState<SortOption>(
-        () => sortOptions.find((o) => o.id === params.lang) || sortOptions[0]
-    )
     const [show_side_nav, setShowSideNav] = useState<boolean>(false)
-    const router = useRouter()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -82,12 +57,6 @@ export const Header: FC<HeaderProps> = () => {
             segement: "contact",
         },
     ]
-
-    const handleLocaleChange = (e: SortOption) => {
-        const pathname_split = pathname.split("/").filter((p) => p)
-        pathname_split[0] = e.id
-        router.push(`/${pathname_split.join("/")}`)
-    }
 
     return (
         <header
@@ -145,14 +114,6 @@ export const Header: FC<HeaderProps> = () => {
                 </ul>
                 <div className="flex items-center gap-2">
                     <ThemeButton />
-                    <div className="relative z-10 flex flex-col items-end gap-4 text-gray-600 dark:text-gray-300 md:flex-row md:items-center md:justify-between">
-                        <SortListBox
-                            className="ml-auto"
-                            selected={sortOrder}
-                            setSelected={handleLocaleChange}
-                            options={sortOptions}
-                        />
-                    </div>
                 </div>
             </nav>
         </header>
