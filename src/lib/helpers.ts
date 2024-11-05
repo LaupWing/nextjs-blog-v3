@@ -48,8 +48,6 @@ export const getFromSessionStorage = (key: string) => {
 export const attachContentMeta = async <T extends ContentType>(
     frontmatters: Array<PickFrontmatter<T>>
 ) => {
-    const slug = frontmatters[0].slug
-
     return await Promise.all(
         frontmatters.map(async (frontmatter) => {
             const data = await prisma.contentMeta.upsert({
