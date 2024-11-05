@@ -49,28 +49,7 @@ export const attachContentMeta = async <T extends ContentType>(
     frontmatters: Array<PickFrontmatter<T>>
 ) => {
     const slug = frontmatters[0].slug
-    console.log(frontmatters[0].slug)
-    console.log(
-        await prisma.contentMeta.upsert({
-            where: {
-                slug,
-            },
-            update: {
-                slug,
-            },
-            create: {
-                slug,
-            },
-            include: {
-                _count: {
-                    select: {
-                        Like: true,
-                        View: true,
-                    },
-                },
-            },
-        })
-    )
+
     return await Promise.all(
         frontmatters.map(async (frontmatter) => {
             const data = await prisma.contentMeta.upsert({
@@ -99,18 +78,4 @@ export const attachContentMeta = async <T extends ContentType>(
             }
         })
     )
-    // return await Promise.all(
-    //     frontmatters.map(async (frontmatter) => {
-    //         const res = await fetch(
-    //             `${process.env.API_URL}/content/${frontmatter.slug}`
-    //         )
-    //         const data = await res.json()
-
-    //         return {
-    //             ...frontmatter,
-    //             views: data.views,
-    //             likes: data.likes,
-    //         }
-    //     })
-    // )
 }
