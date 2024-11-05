@@ -3,19 +3,240 @@
 @tailwind utilities;
 
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --custom-red: 253 0 76 /* #fd004c */;
+    --custom-orange: 254 144 0 /* #fe9000 */;
+    --custom-green: 62 223 75 /* #3edf4b */;
+    --custom-blue: 51 99 255 /* #3363ff */;
+    --custom-purple: 177 2 183 /* #b102b7 */;
+    --custom-light: 255 255 255;
+    --custom-dark: 14 14 14;
+    --nav-height: 4.5rem;
+}
+
+.dark {
+    color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
+}
+
+@keyframes straight {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
     }
 }
 
-body {
-    color: var(--foreground);
-    background: var(--background);
-    font-family: Arial, Helvetica, sans-serif;
+@keyframes spin {
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@layer base {
+    h1,
+    .h1 {
+        @apply text-2xl font-bold md:text-4xl;
+    }
+
+    h2,
+    .h2 {
+        @apply text-xl font-bold md:text-3xl;
+    }
+
+    h3,
+    .h3 {
+        @apply text-lg font-bold md:text-2xl;
+    }
+
+    h4,
+    .h4 {
+        @apply text-base font-bold md:text-lg;
+    }
+
+    .custom-container {
+        max-width: 85rem;
+        @apply mx-auto w-11/12;
+    }
+
+    .cursor-newtab {
+        cursor: url("/images/new-tab.png") 10 10, pointer;
+    }
+
+    .gradient-animation {
+        background: linear-gradient(
+            -45deg,
+            rgb(var(--custom-red)),
+            rgb(var(--custom-orange)),
+            rgb(var(--custom-green)),
+            rgb(var(--custom-blue)),
+            rgb(var(--custom-purple)),
+            rgb(var(--custom-red))
+        );
+        background-size: 400% 400%;
+        animation: straight 15s linear infinite;
+    }
+
+    .gradient-animation-border {
+        @apply relative p-1 rounded-md overflow-hidden;
+    }
+
+    .gradient-animation-border::before {
+        content: "";
+        height: 440%;
+        width: 180%;
+        left: -40%;
+        top: -160%;
+        position: absolute;
+        background: conic-gradient(
+            rgb(var(--custom-red)),
+            rgb(var(--custom-orange)),
+            rgb(var(--custom-green)),
+            rgb(var(--custom-blue)),
+            rgb(var(--custom-purple)),
+            rgb(var(--custom-red))
+        );
+        animation: spin 1.5s linear infinite;
+    }
+
+    .gradient-animation-slow {
+        background: linear-gradient(
+            -45deg,
+            rgb(var(--custom-red)),
+            rgb(var(--custom-orange)),
+            rgb(var(--custom-green)),
+            rgb(var(--custom-blue)),
+            rgb(var(--custom-purple)),
+            rgb(var(--custom-red))
+        );
+        background-size: 400% 400%;
+        animation: straight 100s linear infinite;
+    }
+}
+
+@layer utilities {
+    [data-fade] {
+        @apply delay-200 translate-y-10 opacity-0 transition duration-300 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100;
+    }
+
+    .fade-in-start [data-fade] {
+        @apply translate-y-0 opacity-100;
+    }
+
+    .fade-in-start [data-fade="1"] {
+        transition-delay: 100ms;
+    }
+
+    .fade-in-start [data-fade="2"] {
+        transition-delay: 200ms;
+    }
+
+    .fade-in-start [data-fade="3"] {
+        transition-delay: 300ms;
+    }
+
+    .fade-in-start [data-fade="4"] {
+        transition-delay: 400ms;
+    }
+
+    .fade-in-start [data-fade="5"] {
+        transition-delay: 500ms;
+    }
+
+    .fade-in-start [data-fade="6"] {
+        transition-delay: 600ms;
+    }
+
+    .fade-in-start [data-fade="7"] {
+        transition-delay: 700ms;
+    }
+
+    .fade-in-start [data-fade="8"] {
+        transition-delay: 800ms;
+    }
+
+    .animated-underline {
+        background: linear-gradient(#33333300, #33333300),
+            linear-gradient(
+                to right,
+                rgb(var(--custom-red)),
+                rgb(var(--custom-orange)),
+                rgb(var(--custom-green)),
+                rgb(var(--custom-blue)),
+                rgb(var(--custom-purple)),
+                rgb(var(--custom-red))
+            );
+        background-size: 100% 2px, 0 2px;
+        background-position: 100% 100%, 0 100%;
+        background-repeat: no-repeat;
+        transition: 0.3s ease;
+        transition-property: background-size, color, background-color,
+            border-color;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animated-underline {
+            transition: none;
+        }
+    }
+    .animated-underline:hover,
+    .animated-underline:focus-visible,
+    .project-card:hover .animated-underline,
+    .project-card:focus-visible .animated-underline {
+        background-size: 0 2px, 100% 2px;
+    }
+}
+
+.tippy-tooltip [x-circle] {
+    background-color: transparent !important;
+}
+
+.tippy-tooltip {
+    padding: 0 0.8rem;
+}
+
+.heart-animate {
+    transition: transform 80ms cubic-bezier(0.64, 0.57, 0.67, 1.53);
+    transform: scale(1);
+}
+
+.heart-animate:hover,
+.heart-animate:focus,
+.heart-button:hover .heart-animate {
+    transform: scale(1.1);
+}
+
+.heart-button:focus-visible .heart-animate {
+    @apply rounded-sm focus:outline-none focus-visible:ring focus-visible:ring-light;
+}
+
+.heart-animate:active,
+.heart-button:active .heart-animate {
+    transform: scale(1.2);
+}
+
+@keyframes emoji-animation {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    80% {
+        transform: translateY(-40px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-40px);
+        opacity: 0;
+    }
+}
+
+.emoji-animate {
+    animation: emoji-animation 0.7s cubic-bezier(0.33, 1, 0.68, 1);
 }
