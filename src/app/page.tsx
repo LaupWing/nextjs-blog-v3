@@ -13,34 +13,24 @@ import { Subscribe } from "@/components/sections/Subscribe.client"
 import { ContactMe } from "@/components/sections/ContactMe"
 import { LoadedContainer } from "@/components/containers/LoadedContainer.client"
 import { FC } from "react"
-import { getDictionary } from "./dictionaries"
-import { Locale } from "@/i18.config"
 
 export const revalidate = 60 * 60 // 1 hour
 
-interface PageProps {
-    params: {
-        lang: Locale
-    }
-}
-
-export default async function Home(page_props: PageProps) {
+export default async function Home() {
     return (
         <main>
-            <HomeIntro lang={page_props.params.lang} />
+            test
+            {/* <HomeIntro />
             <ContactMe />
-            <HomeBlogs lang={page_props.params.lang} />
-            <HomeProjects lang={page_props.params.lang} />
-            <HomeLibrary lang={page_props.params.lang} />
-            <Subscribe />
+            <HomeBlogs />
+            <HomeProjects />
+            <HomeLibrary />
+            <Subscribe /> */}
         </main>
     )
 }
 
-const HomeIntro: FC<{
-    lang: Locale
-}> = async ({ lang }) => {
-    const dict = await getDictionary(lang)
+const HomeIntro: FC = async () => {
     const social_link_style =
         "inline-flex items-center gap-1 text-sm font-medium md:text-base text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-accent-light group"
 
@@ -76,19 +66,21 @@ const HomeIntro: FC<{
                         className="text-2xl text-dark dark:text-light font-bold md:text-4xl 2xl:text-5xl"
                         data-fade="1"
                     >
-                        {dict.home.intro.hello}
+                        Hello
                     </h2>
                     <h1
                         className="mt-1 text-dark dark:text-light font-bold text-3xl md:text-5xl 2xl:text-6xl"
                         data-fade="2"
                     >
-                        {dict.home.intro.name} <Accent>Loc Nguyen</Accent>
+                        My name is <Accent>Loc Nguyen</Accent>
                     </h1>
                     <p
                         className="mt-4 max-w-4xl text-gray-700 dark:text-gray-200 md:mt-6 md:text-lg 2xl:text-xl"
                         data-fade="3"
                     >
-                        {dict.home.intro.text}
+                        I possess a strong enthusiasm for both programming and
+                        fitness, finding fulfillment in assisting individuals
+                        either at the gym or in the realm of coding.
                     </p>
                     <div
                         className="mt-8 flex flex-wrap gap-4 md:!text-lg"
@@ -100,12 +92,10 @@ const HomeIntro: FC<{
                                 href="/blog"
                                 variant="gradient-animation"
                             >
-                                {dict.home.intro.button_text1}
+                                Read the Blog
                             </ButtonLink>
                         </div>
-                        <Button href="/about">
-                            {dict.home.intro.button_text2}
-                        </Button>
+                        <Button href="/about">Learn more about me</Button>
                     </div>
                     <div
                         className="mt-4 flex flex-wrap gap-4 gap-y-2 md:mt-8"
@@ -135,14 +125,14 @@ const HomeIntro: FC<{
     )
 }
 
-const fetchRecentBlogs = async (lang: Locale) => {
-    const blogs = await getAllFilesFrontmatter("blog", lang)
+const fetchRecentBlogs = async () => {
+    const blogs = await getAllFilesFrontmatter("blog")
     const recent_blogs = getRecent(blogs)
     return await attachContentMeta<"blog">(recent_blogs)
 }
 
-const HomeBlogs: FC<{ lang: Locale }> = async ({ lang }) => {
-    const recent_blogs = await fetchRecentBlogs(lang)
+const HomeBlogs: FC = async () => {
+    const recent_blogs = await fetchRecentBlogs()
 
     return (
         <section className="py-20">
@@ -166,17 +156,15 @@ const HomeBlogs: FC<{ lang: Locale }> = async ({ lang }) => {
     )
 }
 
-const fetchRecentProjects = async (lang: Locale) => {
-    const projects = await getAllFilesFrontmatter("projects", lang)
+const fetchRecentProjects = async () => {
+    const projects = await getAllFilesFrontmatter("projects")
     const recent_projects = getRecent(projects)
 
     return recent_projects
 }
 
-const HomeProjects: FC<{
-    lang: Locale
-}> = async ({ lang }) => {
-    const recent_projects = await fetchRecentProjects(lang)
+const HomeProjects: FC = async () => {
+    const recent_projects = await fetchRecentProjects()
 
     return (
         <section className="py-20">
@@ -204,18 +192,16 @@ const HomeProjects: FC<{
     )
 }
 
-const fetchRecentLibrary = async (lang: Locale) => {
-    const library = await getAllFilesFrontmatter("library", lang)
+const fetchRecentLibrary = async () => {
+    const library = await getAllFilesFrontmatter("library")
 
     const recent_library = getRecent(library)
 
     return await attachContentMeta<"library">(recent_library)
 }
 
-const HomeLibrary: FC<{
-    lang: Locale
-}> = async ({ lang }) => {
-    const recentLibrary = await fetchRecentLibrary(lang)
+const HomeLibrary: FC = async () => {
+    const recentLibrary = await fetchRecentLibrary()
 
     return (
         <section className="py-20">
