@@ -21,11 +21,12 @@ export const UnstyledLink: FC<UnstyledLinkProps> = ({
     ...props
 }) => {
     const pathname = usePathname()
-    const params = useParams()
+
     let _href = href
     if (href.includes("#")) {
         _href = `${pathname}${href}`
     }
+
     const isNewTab =
         openNewTab !== undefined
             ? openNewTab
@@ -33,11 +34,7 @@ export const UnstyledLink: FC<UnstyledLinkProps> = ({
 
     if (!isNewTab) {
         return (
-            <Link
-                href={`/${params.lang}/${_href}`}
-                className={className}
-                {...props}
-            >
+            <Link href={`${_href}`} className={className} {...props}>
                 {children}
             </Link>
         )
