@@ -47,18 +47,20 @@ export const getFromSessionStorage = (key: string) => {
 export const attachContentMeta = async <T extends ContentType>(
     frontmatters: Array<PickFrontmatter<T>>
 ) => {
-    return await Promise.all(
-        frontmatters.map(async (frontmatter) => {
-            const res = await fetch(
-                `${process.env.API_URL}/content/${frontmatter.slug}`
-            )
-            const data = await res.json()
+    console.log(frontmatters[0].slug)
+    return []
+    // return await Promise.all(
+    //     frontmatters.map(async (frontmatter) => {
+    //         const res = await fetch(
+    //             `${process.env.API_URL}/content/${frontmatter.slug}`
+    //         )
+    //         const data = await res.json()
 
-            return {
-                ...frontmatter,
-                views: data.views,
-                likes: data.likes,
-            }
-        })
-    )
+    //         return {
+    //             ...frontmatter,
+    //             views: data.views,
+    //             likes: data.likes,
+    //         }
+    //     })
+    // )
 }
