@@ -1,101 +1,245 @@
-import Image from "next/image"
+import { IconGithub, IconNewspaper, IconTwitter } from "@/components/Icons"
+import { TC } from "@/components/TC"
+import { Button } from "@/components/buttons/Button"
+import { BlogCard } from "@/components/cards/BlogCard"
+import { Accent } from "@/components/elements/Accent"
+import { UnstyledLink } from "@/components/links/UnstyledLink.client"
+import { ButtonLink } from "@/components/links/ButtonLink"
+import { getAllFilesFrontmatter, getRecent } from "@/lib/mdx"
+import { ProjectCard } from "@/components/cards/ProjectCard"
+import { attachContentMeta } from "@/lib/helpers"
+import { LibraryCard } from "@/components/cards/LibraryCard"
+import { Subscribe } from "@/components/sections/Subscribe.client"
+import { ContactMe } from "@/components/sections/ContactMe"
+import { LoadedContainer } from "@/components/containers/LoadedContainer.client"
+import { FC } from "react"
+import { getDictionary } from "./dictionaries"
+import { Locale } from "@/i18.config"
 
-export default function Home() {
+export const revalidate = 60 * 60 // 1 hour
+
+interface PageProps {
+    params: {
+        lang: Locale
+    }
+}
+
+export default async function Home(page_props: PageProps) {
+    const dict = await getDictionary(page_props.params.lang as any)
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                <Image
-                    className="dark:invert"
-                    src="/next.svg"
-                    alt="Next.js logo"
-                    width={180}
-                    height={38}
-                    priority
-                />
-                <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-                    <li className="mb-2">
-                        Get started by editing{" "}
-                        <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-                            src/app/page.tsx
-                        </code>
-                        .
-                    </li>
-                    <li>Save and see your changes instantly.</li>
-                </ol>
+        <main>
+            <HomeIntro lang={page_props.params.lang} />
+            <ContactMe />
+            <HomeBlogs lang={page_props.params.lang} />
+            <HomeProjects lang={page_props.params.lang} />
+            <HomeLibrary lang={page_props.params.lang} />
+            <Subscribe />
+        </main>
+    )
+}
 
-                <div className="flex gap-4 items-center flex-col sm:flex-row">
-                    <a
-                        className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-                        href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
+const HomeIntro: FC<{
+    lang: Locale
+}> = async ({ lang }) => {
+    const dict = await getDictionary(lang)
+    const social_link_style =
+        "inline-flex items-center gap-1 text-sm font-medium md:text-base text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white focus:outline-none focus-visible:ring focus-visible:ring-accent-light group"
+
+    const socials = [
+        {
+            name: "Resume",
+            icon: IconNewspaper,
+            href: `${process.env.BASE_URL}resume.pdf`,
+            label: "resume",
+            className: "",
+        },
+        {
+            name: "Twitter",
+            icon: IconTwitter,
+            href: "https://google.com",
+            label: "@laupwing",
+            className: "group-hover:text-[#1da1f2]",
+        },
+        {
+            name: "Github",
+            icon: IconGithub,
+            href: "https://google.com",
+            label: "laupwing",
+            className: "",
+        },
+    ]
+
+    return (
+        <LoadedContainer id="skip-nav">
+            <section className="flex flex-col items-center justify-center h-screen-no-nav">
+                <div className="custom-container">
+                    <h2
+                        className="text-2xl text-dark dark:text-light font-bold md:text-4xl 2xl:text-5xl"
+                        data-fade="1"
                     >
-                        <Image
-                            className="dark:invert"
-                            src="/vercel.svg"
-                            alt="Vercel logomark"
-                            width={20}
-                            height={20}
-                        />
-                        Deploy now
-                    </a>
-                    <a
-                        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-                        href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {dict.home.intro.hello}
+                    </h2>
+                    <h1
+                        className="mt-1 text-dark dark:text-light font-bold text-3xl md:text-5xl 2xl:text-6xl"
+                        data-fade="2"
                     >
-                        Read our docs
-                    </a>
+                        {dict.home.intro.name} <Accent>Loc Nguyen</Accent>
+                    </h1>
+                    <p
+                        className="mt-4 max-w-4xl text-gray-700 dark:text-gray-200 md:mt-6 md:text-lg 2xl:text-xl"
+                        data-fade="3"
+                    >
+                        {dict.home.intro.text}
+                    </p>
+                    <div
+                        className="mt-8 flex flex-wrap gap-4 md:!text-lg"
+                        data-fade="4"
+                    >
+                        <div className="group relative flex">
+                            <div className="absolute -inset-0.5 animate-pulse rounded blur from-custom-green bg-gradient-to-r to-custom-purple opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200" />
+                            <ButtonLink
+                                href="/blog"
+                                variant="gradient-animation"
+                            >
+                                {dict.home.intro.button_text1}
+                            </ButtonLink>
+                        </div>
+                        <Button href="/about">
+                            {dict.home.intro.button_text2}
+                        </Button>
+                    </div>
+                    <div
+                        className="mt-4 flex flex-wrap gap-4 gap-y-2 md:mt-8"
+                        data-fade="5"
+                    >
+                        {socials.map((social) => (
+                            <UnstyledLink
+                                key={social.name}
+                                href={social.href}
+                                className={social_link_style}
+                            >
+                                <social.icon
+                                    className={
+                                        "shrink-0 w-5 h-5 transition-colors " +
+                                        social.className
+                                    }
+                                    aria-hidden="true"
+                                />
+                                <span className="sr-only">{social.name}</span>
+                            </UnstyledLink>
+                        ))}
+                    </div>
                 </div>
-            </main>
-            <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <TC className="absolute bottom-0 right-6 transform-gpu w-[calc(100%-3rem)] md:w-[600px] 2xl:w-[900px] h-[calc(100%-3rem)] md:h-[600px] 2xl:h-[900px] opacity-20 dark:opacity-10 stroke-slate-400 dark:stroke-accent" />
+            </section>
+        </LoadedContainer>
+    )
+}
+
+const fetchRecentBlogs = async (lang: Locale) => {
+    const blogs = await getAllFilesFrontmatter("blog", lang)
+    const recent_blogs = getRecent(blogs)
+    return await attachContentMeta<"blog">(recent_blogs)
+}
+
+const HomeBlogs: FC<{ lang: Locale }> = async ({ lang }) => {
+    const recent_blogs = await fetchRecentBlogs(lang)
+
+    return (
+        <section className="py-20">
+            <div className="custom-container">
+                <h2
+                    id="projects"
+                    className="text-2xl font-semibold md:text-4xl"
                 >
-                    <Image
-                        aria-hidden
-                        src="/file.svg"
-                        alt="File icon"
-                        width={16}
-                        height={16}
-                    />
-                    Learn
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    <Accent>Recent Blog Posts</Accent>
+                </h2>
+                <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {recent_blogs.map((post) => (
+                        <BlogCard key={post.slug} post={post} />
+                    ))}
+                </ul>
+                <ButtonLink className="mt-4" href="/blog">
+                    See more post
+                </ButtonLink>
+            </div>
+        </section>
+    )
+}
+
+const fetchRecentProjects = async (lang: Locale) => {
+    const projects = await getAllFilesFrontmatter("projects", lang)
+    const recent_projects = getRecent(projects)
+
+    return recent_projects
+}
+
+const HomeProjects: FC<{
+    lang: Locale
+}> = async ({ lang }) => {
+    const recent_projects = await fetchRecentProjects(lang)
+
+    return (
+        <section className="py-20">
+            <article className="custom-container">
+                <h2 id="projects" className="text-2xl md:text-4xl">
+                    <Accent>Recent Projects</Accent>
+                </h2>
+                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                    My most recent awesome projects.
+                </p>
+                <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {recent_projects.map((project) => (
+                        <ProjectCard key={project.slug} project={project} />
+                    ))}
+                </ul>
+                <ButtonLink
+                    className="mt-4"
+                    href="/projects"
+                    // Add tracking event
                 >
-                    <Image
-                        aria-hidden
-                        src="/window.svg"
-                        alt="Window icon"
-                        width={16}
-                        height={16}
-                    />
-                    Examples
-                </a>
-                <a
-                    className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-                    href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    See more projects
+                </ButtonLink>
+            </article>
+        </section>
+    )
+}
+
+const fetchRecentLibrary = async (lang: Locale) => {
+    const library = await getAllFilesFrontmatter("library", lang)
+
+    const recent_library = getRecent(library)
+
+    return await attachContentMeta<"library">(recent_library)
+}
+
+const HomeLibrary: FC<{
+    lang: Locale
+}> = async ({ lang }) => {
+    const recentLibrary = await fetchRecentLibrary(lang)
+
+    return (
+        <section className="py-20">
+            <article className="custom-container">
+                <h2 className="text-2xl md:text-4xl" id="library">
+                    <Accent>Libary of Code Snippets</Accent>
+                </h2>
+                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                    List of code snippets. What is documented is never lost.
+                </p>
+                <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {recentLibrary.map((snippet) => (
+                        <LibraryCard key={snippet.slug} snippet={snippet} />
+                    ))}
+                </ul>
+                <ButtonLink
+                    className="mt-4"
+                    href="/library"
+                    // Add tracking event
                 >
-                    <Image
-                        aria-hidden
-                        src="/globe.svg"
-                        alt="Globe icon"
-                        width={16}
-                        height={16}
-                    />
-                    Go to nextjs.org →
-                </a>
-            </footer>
-        </div>
+                    See more snippets
+                </ButtonLink>
+            </article>
+        </section>
     )
 }
