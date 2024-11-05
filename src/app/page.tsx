@@ -19,13 +19,12 @@ export const revalidate = 60 * 60 // 1 hour
 export default async function Home() {
     return (
         <main>
-            test
-            {/* <HomeIntro />
+            <HomeIntro />
             <ContactMe />
             <HomeBlogs />
             <HomeProjects />
             <HomeLibrary />
-            <Subscribe /> */}
+            <Subscribe />
         </main>
     )
 }
