@@ -21,10 +21,10 @@ export default async function Home() {
         <main>
             <HomeIntro />
             <ContactMe />
-            <HomeBlogs />
+            {/* <HomeBlogs />
             <HomeProjects />
             <HomeLibrary />
-            <Subscribe />
+            <Subscribe /> */}
         </main>
     )
 }
