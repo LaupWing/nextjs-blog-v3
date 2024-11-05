@@ -25,7 +25,6 @@ interface PageProps {
 }
 
 export default async function Home(page_props: PageProps) {
-    const dict = await getDictionary(page_props.params.lang as any)
     return (
         <main>
             <HomeIntro lang={page_props.params.lang} />
