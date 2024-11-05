@@ -1,4 +1,5 @@
 import type { ContentType, PickFrontmatter } from "@/types/frontmatters"
+import { prisma } from "./prisma"
 
 interface OpenGraphType {
     site_name: string
@@ -47,8 +48,57 @@ export const getFromSessionStorage = (key: string) => {
 export const attachContentMeta = async <T extends ContentType>(
     frontmatters: Array<PickFrontmatter<T>>
 ) => {
+    const slug = frontmatters[0].slug
     console.log(frontmatters[0].slug)
-    return []
+    console.log(
+        await prisma.contentMeta.upsert({
+            where: {
+                slug,
+            },
+            update: {
+                slug,
+            },
+            create: {
+                slug,
+            },
+            include: {
+                _count: {
+                    select: {
+                        Like: true,
+                        View: true,
+                    },
+                },
+            },
+        })
+    )
+    return await Promise.all(
+        frontmatters.map(async (frontmatter) => {
+            const data = await prisma.contentMeta.upsert({
+                where: {
+                    slug: frontmatter.slug,
+                },
+                update: {
+                    slug: frontmatter.slug,
+                },
+                create: {
+                    slug: frontmatter.slug,
+                },
+                include: {
+                    _count: {
+                        select: {
+                            Like: true,
+                            View: true,
+                        },
+                    },
+                },
+            })
+            return {
+                ...frontmatter,
+                views: data._count.View,
+                likes: data._count.Like,
+            }
+        })
+    )
     // return await Promise.all(
     //     frontmatters.map(async (frontmatter) => {
     //         const res = await fetch(
