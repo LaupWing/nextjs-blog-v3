@@ -1,0 +1,88 @@
+---
+title: "React:  How to add tailwind to a React Vite project"
+tags: "typescript,javascript,react,tailwindcss"
+publishedAt: "2024-03-26"
+description: "Learn how to add tailwind to a React Vite project and configure it to work with your React project."
+---
+> React: How to add tailwind to a React Vite project
+
+The exact steps described here can also be found in the official Tailwind documentation.
+
+Tailwind link:
+
+The only difference is that we will not use the template flag to generate our React project with Vite.
+
+Instead, we will use the terminal selection to get our React TypeScript boilerplate.
+
+## Create React TypeScript Project with Vite
+
+### Initialize
+
+Run the following script and choose the options to create a boilerplate Vite React TypeScript project:
+
+```bash
+npm create vite@latest
+
+```
+
+First, you will have to define a name for the project.
+
+I have named mine vite-react-typescript, but you are free to name your project however you like.
+
+Next, choose the React framework.
+
+Next to that, you will need to select the TypeScript option if you want to add TypeScript to it.
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/vite_react_typescript"
+    alt="templates"
+    width={700}
+    height={200}
+/>
+
+### Change Directory and Install
+
+Now that we have the boilerplate setup, we can change the directory into that project and install the npm packages:
+
+```bash
+cd vite-react-typescript
+npm install
+```
+
+## Installing tailwind
+
+Next, we'll install Tailwind.
+
+### **Install Tailwind CSS**
+
+First, install **`tailwindcss`** and its peer dependencies. After that, it will generate your **`tailwind.config.js`** and **`postcss.config.js`** files.
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+```
+
+### **Configure Your Template Paths**
+
+Update your **`tailwind.config.js`** file to include the paths to all your template files.
+
+```jsx
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+```
+
+### **Add the Tailwind Directives to Your CSS**
+
+In your **`./src/index.css`** file, add the **`@tailwind`** directives for each of Tailwind's layers.

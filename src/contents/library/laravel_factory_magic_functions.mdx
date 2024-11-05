@@ -1,0 +1,52 @@
+---
+title: "Laravel: Foreign relationships"
+tags: "laravel,php"
+publishedAt: "2024-01-22"
+description: "Improve React development efficiency using ComponentPropsWithoutRef."
+---
+
+> Laravel Foreign relationships
+
+Within Laravel there are many different ways to implement foreign keys. The way you choose to implement them doesn't matter, but it's important to be consistent.
+
+So choose the one that works best for you and stick with it.
+
+## ForeignId and foreign
+```php
+<?php
+public function up(): void
+  {
+    Schema::create("books", function (Blueprint $table) {
+      $table->foreignId("author_id");
+      $table->foreign("author_id")
+        ->references("id")
+        ->on("authors");
+    });
+  }
+```
+
+## UnsignedBigInteger and foreign
+```php
+<?php
+public function up(): void
+  {
+    Schema::create("books", function (Blueprint $table) {
+      $table->unsignedBigInteger("author_id");
+      $table->foreign("author_id")->references("id")->on("authors");
+    });
+  }
+```
+
+## ForeignIdFor
+```php
+<?php
+public function up(): void
+  {
+    Schema::create("books", function (Blueprint $table) {
+      // The below is not correcty you need to reference an model
+      $table->foreignIdFor("authors");
+    });
+  }
+```
+
+```

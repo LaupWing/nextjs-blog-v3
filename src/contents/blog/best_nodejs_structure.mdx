@@ -1,0 +1,695 @@
+---
+title: "The best express typescript structure example"
+publishedAt: "2024-02-27"
+description: "With expressjs you have to build your project structure yourself. This article will show you the best way to structure your express project with typescript."
+englishOnly: "true"
+banner: "techblog/thumbnails/buildings_retro"
+tags: "nodejs,sql,typescript,express"
+---
+
+The most popular web framework for building Node.js servers currently is Express.js. With this robust backend server framework, you can build servers that support routing, middleware, and view systems using view engines like Pug or EJS.
+
+In this tutorial, we are going to build a simple Node.js REST API todo application using what I believe is the best structure. We will be using Express in combination with TypeScript to make this application type-safe.
+
+Lastly, we will use Prisma with MySQL for saving data.
+
+To follow this tutorial without any trouble, it is required that you have Node.js v16 and above installed, as well as MySQL.
+
+For Windows users, the easiest way to install MySQL is by installing a PHP development environment called XAMPP.
+
+## What is typescript?
+
+TypeScript is a superset of JavaScript, built upon it to introduce additional types to the language. Its primary purpose is to enforce the inclusion of types where necessary. This not only aids in preventing common type-related bugs, such as comparing strings to numbers, but also enhances development tools like VSCode by providing excellent auto-completion features.
+
+## What is Prisma?
+
+Prisma is a practical tool for Node.js that streamlines database tasks. It works seamlessly with TypeScript to prevent common errors such as mixing up strings and numbers. This collaboration ensures early error detection, particularly when using VSCode for efficient coding. Notably, Prisma supports databases like PostgreSQL and MySQL, making it versatile.
+
+## Birds-eye view of the app
+
+We are going to build a simple todo API application. What's original, right? But the point of this project is not to impress other people; it is to showcase the Node.js Express structure. So the kind of project is not really relevant in my opinion. As long as the project covers all the CRUD (Create, Read, Update, and Delete) operations.
+
+### Routes
+
+This web application will support all available HTTP request methods: GET, POST, PUT, and DELETE.
+
+All the possible routes will look like this.
+
+| Methods | Urls          | Actions               |
+| ------- | ------------- | --------------------- |
+| GET     | api/todos     | Getting all the todos |
+| GET     | api/todos/:id | Get Todo by id        |
+| POST    | api/todos     | Adds a new Todo       |
+| PUT     | api/todos/:id | Updates a Todo by id  |
+
+To test all of the API routes described above, we are going to make use of Postman.
+
+### **Project Structure**
+
+The project should eventually look like this:
+
+[insert image]
+
+Below, I will explain the most vital parts of this structure:
+
+-   **index.ts**: This is our entry point of the application. We will tell the Node.js engine to start the server with this file (this is specified in the **`package.json`** file).
+-   **server.ts file**: In this file, we will initialize the server logic. This is where we import and initialize all the functionality of the server, such as the endpoints (routes), server configurations, and middleware functionality (if applicable, but in this application, we will not have middleware functionality).
+-   **src directory**: In this directory, you will store all the server application logic and files.
+    -   **controllers directory**: In this directory, you will create all the logic for the routes of specific subroutes in separate files.
+    -   **routes directory**: In this directory, you will create route files for each separate subroute. These subroutes will be connected to the controllers' logic.
+        -   **routes/index.ts**: In this file, we will import all the routes and assign them to their dedicated endpoints.
+-   **Logger.ts file**: This is a class that will be extended by other classes to add logger functionality for our application.
+-   **types.ts file**: Here, our application types will be defined.
+-   **utils.ts file**: The utility functions will be saved here.
+
+## **Create Node.js TypeScript Application**
+
+To create a Node.js server, you will need Node.js and npm installed on your device. Usually, when you install Node.js, the npm package manager will be installed alongside it. If you haven't installed Node.js yet, you can download it from the following link:
+
+[Node.js Download Page](https://nodejs.org/en)
+
+Install the most recommended version of Node.js. After you have installed Node.js on your device, open up your terminal and navigate, using the **`cd`** command, to the location where you want to create your project.
+
+In that location, create a directory called **`express-typescript-todos`**. You can of course pick another name if you wish.
+
+```bash
+cd /path/you/want
+
+mkdir express-typescript-todos
+```
+
+Initialize the Node.js package by using the **`npm init`** command. This will create the **`package.json`** file, which basically holds the information of your project with the necessary npm packages to run your project.
+
+```bash
+npm init
+
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (express-typescript-todos) express-typescript-todos
+version: (1.0.0)
+description: Simple Express Todos Application
+entry point: (index.js)
+test command:
+git repository:
+keywords: nodejs, typescritp, express, prisma, api
+author: loc nguyen
+license: (ISC)
+About to write to C:\Users\pin-d\test\package.json:
+
+{
+    "name": "express-typescript-todos",
+    "version": "1.0.0",
+    "description": "Simple Express Todos Application",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "nodejs",
+        "typescritp",
+        "express",
+        "prisma",
+        "api"
+    ],
+    "author": "loc nguyen",
+    "license": "ISC"
+}
+
+Is this OK? (yes)
+```
+
+You can choose to skip filling in the metadata part by attaching the **`-y`** flag to your init command.
+
+```bash
+npm init --y
+```
+
+## Installing the necessary packages
+
+To build our project, we will need to install some packages. You can think of these packages as the ingredients to build this project (Recipe).
+
+If you are wondering about the difference between **`--save-dev`** and without it, the **`--save-dev`** flag indicates that these packages are used only for development. They are mainly the TypeScript packages because TypeScript cannot be read by the Node.js engine. It is used for the developer to attach types during the development phase and will be compiled to plain Node.js code afterward. Hence, it is defined as a dev package.
+
+```bash
+npm install @prisma/client express
+npm install --save-dev @types/cors @types/express @types/node nodemon prisma ts-node typescript
+```
+
+Finally, in the **`package.json`** file, we need to add our development command to spin up a development server with TypeScript and Node.js by adding the following command under scripts.
+
+```json
+{
+    ...
+    "scripts": {
+        "dev": "ts-node ./src/index.ts"
+    },
+    ...
+}
+```
+
+## Typscript config file
+
+Next up is scaffolding our TypeScript file. This can be achieved effortlessly by utilizing the **`npx`** command with **`tsc`** (short for TypeScript compiler) and adding "init" as an option to generate a **`tsconfig.json`** file.
+
+For those curious about what **`npx`** stands for and its meaning, **`npx`** stands for "Node Package Runner" and serves as a package runner tool for executing Node.js binaries. It is used to run TypeScript compiler commands like **`tsc init`** for generating a **`tsconfig.json`** file.
+
+```bash
+npx tsc --init
+```
+
+This will create and place the **`tsconfig.json`** file in the root of your project directory. You can remove or comment out all the configurations we will not use and just put these configurations inside of it.
+
+```json
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "types": ["node"]
+    },
+    "exclude": ["node_modules"]
+}
+```
+
+## Prisma
+
+### **Prisma Initializing**
+
+To use Prisma, we need to generate the initial Prisma files. We can simply do this by also using the **`npx`** command. But instead of **`tsc`** for TypeScript, we want to execute Prisma binaries. So the full command should look like this:
+
+```bash
+npx prisma init
+```
+
+This command will generate the initial files you need to build and create your Prisma database connection and models. The files that will be added are the **`.env`** file, if it is not created already, and a Prisma directory with a file called **`schema.prisma`**.
+
+If you don’t understand a thing that just happened, don’t worry. We will build the database right away! So let’s start by building our database structure with the help of Prisma.
+
+### **Connect MySQL Database**
+
+In order to connect with our MySQL database, we need to set up a few things. The most important one is the database URL connection that we have to set up in our **`.env`** file.
+
+If you open up your **`.env`** file, you will notice a **`DATABASE_URL`** variable with some comments above it:
+
+```bash
+
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB, and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+
+```
+
+This is generated when you executed the **`npx prisma init`** command. You probably have noticed that this is a PostgreSQL URL and probably have guessed that this is used to connect to a PostgreSQL database. Well, you have guessed correctly!
+
+We will need to swap that URL for this one:
+
+```bash
+DATABASE_URL="mysql://janedoe:mypassword@localhost:3306/mydb"
+```
+
+Of course, you have to replace the login info with your login credentials for MySQL, and the part after the port number is the database name. So in our case, that will be a todos database.
+
+```bash
+DATABASE_URL="mysql://janedoe:mypassword@localhost:3306/todos"
+```
+
+Assuming you have filled in the correct credentials, the connection part is now finished! Let's move on to the exciting part of Prisma, which is creating the table and actually seeding the database with dummy data.
+
+### **Prisma Models**
+
+To define tables and their structure for your database, you will need to define models with Prisma. Models are like blueprints of how your data should look and how it is organized.
+
+These models are created inside your Prisma schema file. This file is named **`schema.prisma`** and is located inside your Prisma folder.
+
+At first, your schema should look like this:
+
+```
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+```
+
+-   **Generator section:** The generator section specifies the code generator for the Prisma client in JavaScript, typically set to "prisma-client-js," and is usually not changed once configured.
+-   **Datasource section:** The datasource section defines a datasource named "db" that connects to a PostgreSQL database, specifying the provider as "postgresql" and setting the connection URL using the value of the "DATABASE_URL" environment variable.
+
+In our case, we will want to use MySQL instead of PostgreSQL. So you only have to replace "postgresql" with "mysql".
+
+```
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+```
+
+Next up is adding our data models. Data models are defined like objects, but each property has a type attached to it. This is done to set the correct structure in your database. In MySQL and PostgreSQL, you have to define beforehand what kind of values a property has.
+
+```jsx
+model Todo {
+    id        String   @id @default(uuid())
+    title     String
+    completed Boolean
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+```
+
+### **Creating Database (Migrating)**
+
+To create your tables in the database, you need to run the following command in the root of your project:
+
+-   **`migrate`**: In the database world, migrating involves updating the schema to align with changes in the application's data model.
+-   **`dev`**: The **`dev`** flag is employed to apply migrations specifically in a development environment, facilitating the seamless integration of database changes during the development phase.
+-   **`-name`**: The **`-name`** flag allows you to specify a name for the migration, providing a clear and identifiable label for the database schema changes. For example, **`-name init`** labels the migration as "init."npx prisma migrate dev --name init
+
+```bash
+
+```
+
+The next two things will happen when executing this command:
+
+1. It creates a new SQL migration file for this migration.
+2. It runs the newly created SQL migration file against the database.
+
+That’s it!
+
+If you open up a MySQL database manager (I recommend TablePlus because of its easy-to-use interface), you will indeed see that a database called **`todos`** is created. Within that database, you will see one table that is called **`todo`**.
+
+So to sum it up, the **`todos`** database is defined at the end of our database URL defined in our **`.env`** file.
+
+```bash
+DATABASE_URL="mysql://janedoe:mypassword@localhost:3306/todos"
+```
+
+All the tables and their structure are defined as models inside the **`prisma.schema`** file. For more in-depth information, you can refer to this URL: [Prisma Documentation](https://www.prisma.io/).
+
+**Create Express TypeScript Server Entry Point**
+
+When people hit your server, it should have a file that starts it all. This file is often called the index file. So let’s create an index file!
+
+In the root of our project, we will create a directory called **`src`**. Inside this **`src`** directory, we will create a file called **`index.ts`**. This will be our entry point for the server. So every request made to the server on a specific port will first go to this file.
+
+Let's create a simple log for now in our file:
+
+```tsx
+console.log("Hello World")
+```
+
+But where do we need to define that this is the entry point of this Express server application? Good question. This is done in the **`package.json`** file. Add the following commands inside your **`package.json`** file:
+
+```json
+{
+	...
+	"scripts": {
+		"dev": "ts-node ./src/index.ts",
+		"start": "node ./dist/src/index.js",
+		"build": "npx tsc"
+	},
+	...
+}
+```
+
+These are now the commands we can run to spin up our server. You should use **`npm run dev`** to start the server in development. But for production, we should build the project first with **`npm run build`** and use **`npm run start`** to start the production server.
+
+This has to be done because TypeScript is not a programming language that is understood by the system. So to make it work, we will need to compile the code to JavaScript first before our server can actually read and use the Express application code.
+
+You probably have noticed that if you ran the **`npm run dev`** command, you got hit with this error if you are using a Windows device.
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/npm_run_dev"
+    alt="templates"
+    width={1424}
+    height={200}
+/>
+
+Don’t panic if that is the case. We will fix this issue right away.
+
+## **Installing the Packages**
+
+The reason we got this error is because the system is trying to run the **`ts-node`** command but has not found this command. To make a long story short, we need to install packages to make this work and build out our server.
+
+You can think of packages as ingredients to build your project. But these ingredients are open-source code built by other people. So we are pulling code that other people have built to create our server.
+
+I'm not explaining all the packages here. You can just install them for now, and throughout the rest of the tutorial, we will explain the packages one by one.
+
+The **`--save-dev`** flag stands for installing these packages for development. Development packages are meant to make our development experience better. For example, Nodemon provides hot reload, meaning it reloads when it detects changes in our files (after saving the file).
+
+```bash
+npm install --save-dev @types/express @types/node nodemon prisma ts-node typescript
+```
+
+Next up is installing the core packages that our Express server needs.
+
+```bash
+npm install @prisma/client express
+```
+
+After installing the packages, there will be a **`package.json`** file in the root directory which shall look something like this:
+
+```json
+{
+    "name": "todo-express",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "seed": "ts-node ./prisma/seed.ts",
+        "dev": "ts-node ./src/index.ts",
+        "start": "node ./dist/src/index.js",
+        "build": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^5.7.1",
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.10.5",
+        "nodemon": "^3.0.2",
+        "prisma": "^5.7.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    }
+}
+```
+
+Now we have all our ducks in order, and we can start building the project!
+
+## **Creating the Entry Point for the Server**
+
+The entry point for our server will be located in **`src/index.ts`**. This means that whenever a user hits an endpoint, the code execution will start from this file on our server.
+
+```tsx
+import type { Application } from "express"
+import express from "express"
+import Server from "./server"
+
+const app: Application = express()
+new Server(app)
+const PORT: number = process.env.PORT ? Number(process.env.PORT) : 8080
+
+app.listen(PORT, () =>
+    console.log(`Server is running on http://localhost:${PORT}`),
+).on("error", (err: any) => {
+    if (err.code === "EADDRINUSE") {
+        console.log("Error: address already in use")
+    } else {
+        console.log(err)
+    }
+})
+```
+
+In the script above:
+
+-   We initialized an Express instance using **`express()`**, which we have imported at the top of the file.
+-   Instantiated a **`Server`** class, which is a file containing the entire server and its configuration (which we will create shortly).
+-   Defined the port number on which the server will listen.
+-   Started the **`listen`** method to listen for any requests.
+
+If you want to test your application right away to see the "Server is running" text, just comment out the **`new Server`** line and the import at the top, and you can start your application with **`npm run start`**.
+
+Otherwise, let’s create the server file!
+
+On the same directory level, create a file called **`server.ts`**:
+
+```tsx
+import type { Application } from "express"
+import express from "express"
+import cors from "cors"
+import Routes from "./routes"
+
+export default class Server {
+    constructor(app: Application) {
+        this.config(app)
+        new Routes(app)
+    }
+
+    private config(app: Application) {
+        const corsOptions = {
+            origin: "http://localhost:8081",
+        }
+
+        app.use(express.json({ limit: "50mb" }))
+        app.use(cors(corsOptions))
+    }
+}
+```
+
+In the code above, we exported a class called **`Server`**, which we instantiated in our **`index.ts`** file. We expect the Express app server instance to be passed inside the constructor, and because this is TypeScript, we need to define the type that is expected, which is **`Application`** in this case.
+
+The constructor starts two things when it is instantiated: it calls the **`config`** method and instantiates another class, which we will delve into in the next chapter.
+
+The **`config`** method expects the app, and inside this method, we set our Express app configurations, such as the CORS configuration and the maximum limit for JSON post/get requests.
+
+If you don’t know what CORS is, here is a link that explains it: [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+
+For now, let's move on to the next chapter, which is the router.
+
+## **Express Routers and Controllers**
+
+With Express, you can attach GET and POST methods directly to the **`app`** Express instance. Alternatively, you could use the Router class of Express, which is what we are going to implement.
+
+Inside our **`src`** directory, we are going to make another directory called **`routes`**. Inside the **`routes`** directory, we will have an **`index.ts`** file. This file is responsible for handling all the routes and subroutes.
+
+```tsx
+import type { Application } from "express"
+import todoRoutes from "./TodoRoutes"
+
+export default class Routes {
+    constructor(app: Application) {
+        app.use("/api", todoRoutes)
+    }
+}
+```
+
+This **`index.ts`** file also exports a class that accepts the app instance. Usually, you will use the **`post`** and **`get`** methods on the app to register routes. But here you see the **`use`** method. This **`use`** method indicates a group of routes. So the **`todoRoutes`** object is handling all the **`/todos`** routes.
+
+Now, let’s create this todos route handler. This file is called **`TodoRoutes.ts`** and is also placed inside the routes folder.
+
+```tsx
+import { Router } from "express"
+import TodoController from "../controllers/TodoController"
+
+export class TodoRoutes {
+    router = Router()
+    controller = new TodoController()
+
+    constructor() {
+        this.router.get("/todos", this.controller.all)
+        this.router.post("/todos", this.controller.create)
+        this.router.get("/todos/:id", this.controller.get)
+        this.router.patch("/todos/:id", this.controller.update)
+        this.router.delete("/todos/:id", this.controller.delete)
+    }
+}
+
+export default new TodoRoutes().router
+```
+
+I have mentioned the Router class of Express, and in the code above, you see the Router class of Express in action.
+
+This router object is instantiated when the **`TodoRoutes`** class is instantiated, which is whenever this file gets imported. You can see that on the line at the bottom.
+
+Basically, what this file does is create all the routes for **`/todos`**, which in this case are:
+
+-   [/todos]: GET request for all todos
+-   [/todos/:id ]GET request for a todo
+-   [/todos/:id] PATCH todo by id
+-   [/todos] POST route for creating a todo
+
+You can see that the handling for the routes is done by yet another file, which is called the controller. This pattern is a very common design pattern called the MVC (Model, View, and Controller) pattern.
+
+Now let's create our todo controller.
+
+Within our **`src`** directory, we are going to create a directory called **`controllers`**. Here we will create all our controller files. Let's create one called **`TodoController.ts`**:
+
+```tsx
+import type { Request, Response } from "express"
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+export default class TodoController {
+    get = async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params
+            const todos = await prisma.todo.findFirstOrThrow({
+                where: {
+                    id: id,
+                },
+            })
+
+            res.json({ todos })
+        } catch (e: any) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    create = async (req: Request, res: Response) => {
+        const { title } = req.body
+        try {
+            const todo = await prisma.todo.create({
+                data: {
+                    title,
+                    completed: false,
+                },
+            })
+
+            res.json({ todo })
+        } catch (e: any) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    update = async (req: Request, res: Response) => {
+        const { id } = req.params
+        const { title, completed } = req.body
+        try {
+            const todo = await prisma.todo.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    title,
+                    completed,
+                },
+            })
+
+            res.json({ todo })
+        } catch (e: any) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    delete = async (req: Request, res: Response) => {
+        const { id } = req.params
+        try {
+            await prisma.todo.delete({
+                where: {
+                    id: id,
+                },
+            })
+
+            res.json({ message: "Todo deleted" })
+        } catch (e: any) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+
+    all = async (req: Request, res: Response) => {
+        try {
+            const todos = await prisma.todo.findMany()
+
+            res.json({ todos })
+        } catch (e: any) {
+            res.status(500).json({ error: e.message })
+        }
+    }
+}
+```
+
+Above, you will see all the route handlers for each route from our **`TodoRoutes.ts`** file. I will not go into detail for each of them. But the general idea here is that we use the Prisma library to perform some kind of CRUD operation on our database. We will return this data that is fetched by Prisma using the **`res`** object and return it as JSON.
+
+If something fails, we will return a status of 500 with the error message.
+
+| Methods | Urls          | Actions               |
+| ------- | ------------- | --------------------- |
+| GET     | api/todos     | Getting all the todos |
+| GET     | api/todos/:id | Get Todo by Id        |
+| POST    | api/todos     | Adds a new Todo       |
+| PUT     | api/todos/:id | Updates a Todo by Id  |
+
+## Run postman
+
+If you have completed all the steps above, we can now test it out with Postman! Make sure you start your application with **`npm run start`**.
+
+Open Postman and start hitting each endpoint of our server!
+
+### Post request to http://localhost:8080/api/todos
+
+If you have completed all the steps above, we can now test it out with Postman! Make sure you start your application with **`npm run start`**.
+
+Open Postman and start hitting each endpoint of our server!
+
+### Post request to http://localhost:8080/api/todos
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/post_request"
+    alt="templates"
+    width={1424}
+    height={1100}
+/>
+### Get request to http://localhost:8080/api/todos/ed2d7ac2-beba-4c74-a52f-fab129e104b0
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/get_request"
+    alt="templates"
+    width={1424}
+    height={1100}
+/>
+
+### Patch request to http://localhost:8080/api/todos/ed2d7ac2-beba-4c74-a52f-fab129e104b0
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/patch_request"
+    alt="templates"
+    width={1424}
+    height={1100}
+/>
+
+### Delete request to http://localhost:8080/api/todos/ed2d7ac2-beba-4c74-a52f-fab129e104b0
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/delete_request"
+    alt="templates"
+    width={1424}
+    height={1100}
+/>
+
+### Get request to http://localhost:8080/api/todos
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/best_nodejs_structure/get_all_request"
+    alt="templates"
+    width={1424}
+    height={1100}
+/>
+
+## **Conclusion**
+
+In this tutorial, you have learned a well-structured approach to building your next Express.js API projects. Although this is a simplified app (another todo app), the structure presented here is powerful and can be easily built upon. Happy coding!

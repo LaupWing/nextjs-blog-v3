@@ -1,0 +1,164 @@
+---
+title: "Dronestart"
+description: "Update and maintain legal documents for flying with drones. Built for droneconsultancy"
+publishedAt: "2024-01-01"
+techs: "vue,tailwindcss,firebase,typescript"
+banner: "techblog/templates_pcy75a"
+github: "https://github.com/LaupWing/dronestart-vue3-refactor"
+---
+
+> ## Short Explanation
+
+In order to operate a drone within the Netherlands, it is mandatory to possess the neccessary legal documentation. To simplify the complex process of obtaining and managing the necessary legal documents for operating drones within the Netherlands, individuals can rely on the expertise of Droneconsultancy. This company specializes in assisting people with the setup and maintenance of these crucial documents.
+
+Droneconsultancy encountered a challenge in maintaining the required documents due to ever-change regulations governing drones. These documents encompass multiple rules and regulations, which often undergo revisions. As a result, the company faces the task of consistenly updating and editing these rules across various documents for each individual client. This process is essential because these rules are reused in multiple documents for each client. 
+
+Droneconsultancy not only has the responsibility of individually updating these regulations changes, but they also have to meticulously maintain records of which regulations are applied to each client. As one can imagine, this task can be monotonous and less enjoyable due to its repetitive nature.
+
+To overcome this partical challenge, Droneconsultancy has assembled a dedicated team entrusted with the task of developing an innovative platform. Our goal was to create a cutting-edge solution that streamlines the process of maintaining and updating the essential legal documents. By implementing this platform, Droneconsultancy can effectively manage and track regulations, significantly simplifying compliance procedures for their clients.
+
+> ## Project Goals
+
+The main focus of this project is to develop a robust web application that serves as a comprehensive document storage system for Droneconsultancy. This web application will incorporate advanced features that allow the staff to effortlessly update regulations, ensuring that any modifications are automatically synchronized across all pertinent documents. By implementing this system, Droneconsultancy can significantly streamline the process of maintaining up-to-date documents, thereby ensuring that clients always have access to the most current regulatory information within their respective documents.
+
+
+The project encompasses several key features:
+
+- Authentication using Firebase Authentication: The system will utilize Firebase Authentication to ensure secure user authentication and access control.
+- Creation, Editing, and Deletion of Legal Documents: Users will have the ability to create, edit, and delete legal documents relevant to their operations. This functionality enables easy management of necessary documentation.
+- User Management: The system will provide functionality for creating, editing, and deleting user accounts. This allows Droneconsultancy to efficiently manage user access and permissions.
+- Regulation Management: Users with the appropriate privileges can create, edit, and delete regulations within the system. This feature ensures that the regulatory framework remains up to date.
+- Automatic Document Updates: Whenever regulations are modified, the system will automatically update the relevant documents. This ensures that clients have access to the most current regulatory information without manual intervention.
+- Two User Roles: The system will support two distinct user roles - Moderator and Client. Moderators will have additional privileges, such as the ability to manage regulations and documents, while clients will have access to view and interact with their own documents.
+
+By incorporating these features, the project aims to provide Droneconsultancy with a comprehensive web application that simplifies the management of legal documents, ensures regulatory compliance, and facilitates efficient user access and collaboration.
+
+<blockquote className='with-icons'>
+  ## Tech Stack Used
+  <div className='not-prose mt-2'>
+    <TechIcons techs={['nextjs', 'tailwindcss', 'swr']} />
+  </div>
+</blockquote>
+
+Dronestart, the web application, has been developed using Vue3 and Firebase as the backend framework. The frontend was built using Vue3 and TypeScript to offer an excellent developer experience, allowing for efficient and maintainable code. User data is securely transmitted to the server and stored in a Firebase database, ensuring reliable data storage and retrieval. 
+
+In addition to Vue3 and Firebase, Dronestart utilizes Pinia as its state management system on the frontend. Pinia provides a simple and effective way to manage the application state, allowing for efficient data handling and updates on both the frontend and the backend hosted on Firebase. This integration ensures smooth synchronization between the frontend and the Firebase backend, enabling seamless data management and a streamlined user experience within the Dronestart web application.
+
+> ## App Explanation & Screenshots
+In this document, we will primarily focus on the core feature of Dronestart, which involves updating the regulations (referred to as templates) and showcasing the relevant user interfaces. Although the application offers various other features and functionalities, we will concentrate on providing detailed explanations and accompanying screenshots specifically for this core feature.
+
+### Moderator story scenario: Updating a template
+
+The screenshot showcases the template section interface in Dronestart, exclusively accessible to moderators. Templates, representing regulations, are categorized under sections for streamlined maintenance and organization. This user-friendly interface empowers moderators with efficient navigation and seamless regulation management within the application.
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/templates_pcy75a"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+
+Once a category is selected, the moderator will be directed to the page shown below. This page displays all the available templates within the chosen section. To edit or update a template, the moderator simply needs to select the desired template from the list. 
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/template_section_xqamge"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+
+Upon selecting the desired template from the list, the editor popup will be displayed. This editor, powered by TinyMCE, provides a WYSIWYG (What You See Is What You Get) editing experience for Vue. Within this editor, moderators can make the desired changes to the template. TinyMCE is a popular and user-friendly editor that offers a range of formatting and customization options, allowing moderators to apply edits with ease and precision.
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/template_detail_utczmm"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+
+
+Once the desired changes are applied to the template, all documents utilizing that specific template will be automatically updated. Let's explore how this process looks and examine the document interface and its location.
+
+To access the document interface and observe the changes, navigate to the user section in the side navigation. Select a user, and within their details, choose the specific document that utilizes the recently updated template. Upon selecting the document, scroll to the template section. Here, you will notice that the changes made to the template have been reflected in the document interface.
+
+This seamless integration ensures that any updates made to the templates are propagated to all relevant documents, providing consistency and accuracy across the application.
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/users_sotrvf"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+<CloudinaryImage
+  mdx
+  public_id="techblog/user_detail_bwy89g"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+<CloudinaryImage
+  mdx
+  public_id="techblog/handboek_vwjgq8"
+  alt="templates"
+  width={1424}
+  height={812}
+/>
+
+> ## My Role
+
+The project commenced with a team of three individuals: a full-stack developer (myself), a UX designer, and a UI designer. This team composition was established during the initial phase of the project. Over the course of our one-year contract, we collaborated to build a Minimal Viable Product (MVP) for Dronestart. Together, we combined our expertise and efforts to create a functional and streamlined web application that fulfills the project's objectives.
+
+
+During the initial phase of the project, I took on the responsibility of selecting the appropriate technologies for Dronestart. This involved carefully evaluating different options and determining the most suitable ones for both the frontend and backend development. Additionally, I played a crucial role in building out the frontend and backend, ensuring their proper structure and functionality. By actively participating in these areas, I contributed to laying the foundation for the successful development of the Dronestart web application.
+
+
+### Technolgies
+#### Vue
+
+When considering the technology options for Dronestart, the decision to use Vue was based on several factors. One of the main considerations was that the application did not require server-side rendering and search engine optimization (SEO) was not a top priority. Given these circumstances, the choice was between React and Vue.
+
+Ultimately, Vue was chosen due to its simplicity and straightforward code structure. Vue's intuitive syntax and clear organization made it easier to maintain, resulting in faster development. The simplicity of Vue also facilitated a quicker coding process, enabling efficient and accelerated development of the application.
+
+By selecting Vue as the framework for Dronestart, the development team aimed to leverage its simplicity and rapid development capabilities to deliver a streamlined and efficient web application.
+
+#### Firebase
+
+The decision to use Firebase as the backend for Dronestart was driven by its ease of use and rapid development capabilities. Firebase provided all the necessary functionality out of the box, making it convenient to implement features without the need for extensive backend development.
+
+Firebase offers built-in authentication, which simplified user authentication and access control for the application. Additionally, its highly customizable database and storage system provided efficient data management and storage solutions.
+
+While Firebase's flexibility allowed for customization, it also posed the risk of adding unnecessary properties to the database. However, the trade-off was deemed acceptable due to the fast development time and the ability to focus on frontend and core features without having to build and manage an advanced backend infrastructure from scratch.
+
+By opting for Firebase, the team aimed to expedite development while still delivering a reliable and feature-rich web application.
+
+> ## My Role (Phase 2 and Phase 3)
+
+
+During Phases 2 and 3 of the project, I took on the responsibility of overseeing all aspects of the development process as the UX and UI developers had left the project. In Phase 2, my focus was primarily on fixing UI and UX problems, giving the web application a fresh look and feel. I addressed any existing issues, implemented design changes, and improved the overall user experience. Despite the underlying technology remaining the same, I dedicated my efforts to refining the user interface and ensuring a seamless and visually appealing user experience throughout the application.
+
+Taking on multiple roles allowed me to have a holistic view of the project and make necessary improvements. With my expertise in frontend development and an eye for design, I worked to create a cohesive and engaging user experience. By resolving UI and UX problems and giving the web app a brand new look, I aimed to enhance the overall quality and usability of Dronestart for its users.
+
+
+In Phase 3, a decision was made to rewrite the entire application due to significant updates in the core technologies. Firebase was upgraded to version 9, and Vue was migrated to Vue 3. This allowed for improved performance, enhanced security, and access to the latest features. The UI was also redesigned during this phase to provide a fresh and intuitive experience, incorporating modern design principles. Additional features were introduced to enhance functionality, and TypeScript was adopted for better development friendliness and code quality.
+
+This rewrite and update ensured that the application could leverage the latest technology advancements, deliver an improved user experience, and maintain a more robust and maintainable codebase for future development.
+
+
+> ## The Problems and How I Deal With It
+
+One of the main challenges we encountered as a team, including myself, was the need to prioritize problem-solving and solution design before engaging in coding and design tasks. It was crucial to invest time and effort into understanding and defining the core problem in order to create the most effective solution. By taking this approach, we ensured that our subsequent development and design work aligned with the desired outcome, leading to more efficient development cycles and higher-quality results.
+
+
+Another challenge I faced was the need to ask insightful questions before introducing new functionality or making significant database changes. There was a request from the employer to revamp the entire database structure, which I initially pursued. However, upon closer examination, it became apparent that this extensive change was unnecessary and undid the hard work invested. This experience emphasized the importance of thorough evaluation and questioning to avoid unnecessary efforts and ensure efficient use of resources.
+
+> ## Lessons Learned
+
+- Prioritize problem-solving before development: It is crucial to invest time and effort in understanding and solving the core problem before diving into coding and design. By focusing on creating the best solution for the problem at hand, you can ensure that the development process is guided by a clear direction and purpose.
+
+- Ask quality questions before making changes: Before adding new functionality or making significant database changes, it is essential to ask insightful questions and thoroughly evaluate the necessity and impact of these modifications. This practice helps avoid unnecessary work and ensures that changes align with the project's goals and requirements.
+
+- Evaluate the need for major changes: When faced with requests for extensive changes, it is important to critically evaluate their necessity and potential impact. Consider the implications and weigh the benefits against the costs and risks involved. This evaluation can help prevent unnecessary efforts and maintain the integrity of the work already done.

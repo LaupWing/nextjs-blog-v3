@@ -1,0 +1,102 @@
+---
+title: "Lessons from solo handing a project with over half a million customers"
+publishedAt: "2022-09-02"
+description: "The main things I've learned from handling a project with over half a million customers on my own."
+englishOnly: "true"
+banner: "techblog/thumbnails/suitcase"
+tags: "laravel,nodejs,sql,typescript,vue"
+---
+
+In my third software development job, I had more responsibility than all my prior jobs combined, as you probably gathered from the title. I was responsible for a web application project with over half a million customers (I cannot disclose the exact amount, but I can assure you that it is more than that).
+
+What makes it more challenging is not just the volume of the project, but also the fact that I had to handle everything by myself—from the frontend to the backend and even some devops. This truly defines the role of a full-stack developer.
+
+Oh, and did I mention that the project was built by another developer? So, not only did I have to manage every aspect of this project, but I simultaneously had to learn how the previous developer had structured the entire project, all with little assistance.
+
+For those wondering about the project stack. Well unfortunately, I cannot disclose this information, because this is confidential information. But the project stack has a dedicated backend and frontend. Both hosted on a virtual private server (VPS). So with this information in mind, you can imagine that the project is quite extensive.
+
+That's all I want to share with you about the project. Let’s delve into the lessons I learned from solo managing this extensive project, so that you are aware of everything and can avoid possible mistakes that I also encountered.
+
+## Pick a Framework with Abundant Functionality and Popularity (Laravel is a Great Choice)
+
+If you are just beginning a project, this will be the most important tip from this article. It is crucial to choose a framework that has loads of functionalities and is widely used. Of course, this advice applies to the early stages of a project, not later on.
+
+I was fortunate enough to join a significant project that used Laravel as its framework. However, the person who initially built this project constructed it with plain old PHP. To make the long story short, the project was challenging to maintain, making it difficult to expand upon.
+
+### So, why is it important to pick a framework with a lot of functionality?
+
+Let’s start with why you should pick a framework in the first place. That’s easy—structure and maintainability. In the context of Laravel, it forces you to build your application within a certain structure. This enforces good code structure and compels you to think carefully about where you should place certain code and in which files.
+
+This code structure is refined through many iterations. While some developers may be arrogant and try to do it their own way, unless you really know what you are doing, it is often wise to follow a structure that has been perfected over the years.
+
+A good code structure ensures you have an easy time finding the functionalities you have built and reduces cognitive load on where you have placed certain functionality.
+
+Talking about functionality, it is also crucial to pick a framework that has a lot of functionality (like Laravel).
+
+Why?
+
+Because you are the only one developing it. It is a big time-saver when you only have to write a few lines of code to make your database work or enable real-time functionality with sockets.
+
+You don’t want to pick a framework where you have to build all the functionality from scratch or gather all the bells and whistles from third parties.
+
+To emphasize this a bit more, let’s take the example of logging for errors within a Node.js Express application. To achieve this, you not only need to learn how the third-party package works, but you also have to rely on the third-party package not to break in the future.
+
+Within Laravel, the logging functionality already works out of the box. There are no additional steps you have to take to set this up.
+
+### Why does it need to be popular?
+
+Because you are all by yourself. Debugging is already hard enough within a team where you can discuss the bugs you are having. Now that you are all alone, the only way you can debug is by either using ChatGPT (which gives more often than not bad code) or Googling.
+
+Googling or researching and looking for answers is one of the most important skills to have as a professional programmer. But in order to find the appropriate answer, there have to be answers on the internet in the first place. So if you are picking a framework that no one has ever touched before, forget finding a solution for an error. You are probably the first one that has encountered this error. And you don’t want to be number one for this one, especially if you are maintaining or building a big application on your own.
+
+## Log a Lot but Wisely and Have Dedicated Log Files
+
+I briefly mentioned logging in the previous chapter, and this aspect is exceptionally important. If you don't have the luxury of choosing the framework for a project, or if the project has already been built and is currently quite substantial, implementing and executing this tip is crucial.
+
+During development, you typically have the luxury of instantly identifying code breaks. Whether it's a syntax error or a type mismatch, you receive an error message indicating the issue and the line where it occurred.
+
+In production, especially with high traffic applications, you lose this luxury. Therefore, it's essential to save your logs in a file, preferably creating logs for each day. Laravel conveniently provides this feature out of the box, and for daily logs, you simply need to modify a value within your **`env`** file.
+
+For frameworks like Express, I recommend using Winston for application logging. As for other frameworks, you'll need to research suitable options. There are also software solutions, such as Sentry, for managing log files, but I won't delve into these as they often come with costs, and my knowledge is limited.
+
+Here are two essential tips regarding logging (I'll explore logging more in-depth in another article):
+
+### Use Logs Wisely
+
+Avoid placing unnecessary logs throughout your code, especially if your application experiences increasing traffic. Excessive logging can quickly lead to very large log files. For instance, in a current project, the developer logs an incoming request from an email webhook every time a customer opens an email. Not only is this unnecessary, but it also complicates code debugging when log files are filled with such statements.
+
+You may wonder what you should log. My general recommendation is to log incoming form data—data originating from user input. In the programming world, there's a saying that users often use applications in unintended ways. This also applies to data entry; you'd be surprised by what people sometimes input into a basic form.
+
+### Have Dedicated Log Files
+
+Due to the importance of logs, it's crucial to organize these files effectively. For example, you could have a file for error logs, another for info logs, and a third for user registration logs. Of course, tailor these files to suit the project's needs.
+
+Organizing log files into separate categories makes it easier to locate specific information, rather than consolidating all logs into one large file.
+
+## Use mySQL (or any other relational database)
+
+It is quite common for me to have to look up data in the database. This could be for various reasons, such as discovering which customers haven’t received an email yet or which customers haven’t received an order or invoice. Regardless of the reason, the point I want to make is that it is very common to have to look up data.
+
+I often have to look up data by combining various datasets. This is very easy to do with SQL. Once you know the SQL language, it is straightforward to quickly retrieve the data you are looking for. It is easy to find data within a table, and you can even cross-reference and combine tables with SQL.
+
+Now, imagine you want to do that with a non-relational database like MongoDB. Not only do you have to write the code to find a specific dataset, but it is also a pain in the neck to combine tables.
+
+An additional benefit of using SQL is that you have to really think about your database structure before you build it.
+
+## Clear Data Structure
+
+This brings me to the final point I want to address in this article. The aspect that adds extra complexity to my work is not just the volume of the project—although that does contribute—but rather, it is the structure of the data.
+
+I must emphasize that the developer who initially built this application wasn’t very experienced with the Laravel framework at that time (though now, he is a genius in Laravel). However, the data structure is subpar, to say the least.
+
+### Not Many Relationships Used
+
+A significant benefit of using SQL and Laravel lies in the easy setup for relationships to update and delete data. This is, of course, assuming that the developer has implemented relationships in the first place. Due to the lack of relationships in the project, there are many complex queries implemented to achieve certain outcomes. These complications could have been avoided if appropriate relationships had been established.
+
+### Naming Fields
+
+This may seem minor and not very impactful in the grand scheme, but I cannot emphasize enough how much brainpower I have expended trying to understand the purposes of certain data fields. This is far from ideal because one not only has to comprehend the written code but also grasp the terminology of how it is used. Moreover, I have made countless mistakes due to inappropriate field naming.
+
+That is all I have for now. There are definitely more things I have learned that I want to share, but these are the most important ones. I have learned a lot from this experience. It was a tough road, and I have certainly made a lot of mistakes. But alongside the failures, I have gained a lot of important lessons.
+
+Hopefully, you have learned something from this article! Have fun coding and hacking!

@@ -1,0 +1,186 @@
+---
+title: "WordPress: Add Tailwind to WordPress"
+tags: "wordpress,javascript,css,php"
+publishedAt: "2024-03-29"
+description: "In this short article, we will add Tailwind to your WordPress theme development pipeline."
+---
+> WordPress: Add Tailwind to WordPress
+
+In this short article, we will add Tailwind to your WordPress theme development pipeline so that you can use your favorite CSS library with every WordPress theme website.
+
+The prerequisite for this tutorial is that you already have a WordPress project instance ready to go.
+
+If you don’t have one, I highly recommend using Local by Flywheel to spin up a new WordPress project.
+
+[Local by Flywheel](https://localwp.com/)
+
+After you have a WordPress instance ready to go, let's hop into adding Tailwind to your project.
+
+## **Creating the Theme**
+
+Inside the **`themes`** directory, which lives in the **`wp-content`** directory, we will create a new directory for our theme. Let's call it **`tailwind-theme`** for now.
+
+```bash
+cd wp-content
+cd themes
+mkdir tailwind-theme
+```
+
+## **Initialize npm and Install wp-scripts**
+
+Now we need to initialize npm. We can do this by simply running the **`npm init`** command with the **`--y`** flag to set everything to the default value.
+
+But make sure you do this within the **`tailwind-theme`** directory.
+
+```bash
+cd tailwind-theme
+npm init --y
+```
+
+To future-proof this project, we will install **`wp-scripts`** and also **`npm-run-all`**.
+
+**`wp-scripts`** is a WordPress package that simplifies the setup of a development environment and includes scripts for common tasks like starting a server, running tests, and building themes or plugins.
+
+**`npm-run-all`** package allows us to run multiple npm scripts in parallel. You will see this in action in the next section when we configure our **`package.json`** file.
+
+```bash
+npm install wp-scripts npm-run-all
+```
+
+## **Installing Tailwind**
+
+Now we can add Tailwind to our theme.
+
+### **Installing Tailwind packages**
+
+Run the scripts below to install all the Tailwind packages necessary.
+
+```bash
+npm install -D tailwindcss
+npx tailwindcss init
+```
+
+It will also initialize a Tailwind configuration file called **`tailwind.config.js`**.
+
+### **Configure tailwind.config.js file**
+
+Now we need to tell Tailwind which files to look for Tailwind classes.
+
+In the code below, we will look for all the PHP files because all of the WordPress pages are PHP-based. You probably have also noticed that we look for the **`.jsx`** file.
+
+We have added this to make this setup future-proof so that it automatically checks for Tailwind classes if you decide to use React for creating Gutenberg sections or blocks in the future.
+
+```json
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    content: [
+        "./**/*.php",
+        "./src/**/*.jsx"
+    ],
+    safelist: [
+        "current-menu-item",
+        "menu-item",
+        "current_page_parent"
+    ],
+    theme: {
+        extend: {
+
+        },
+    },
+    plugins: [
+    ],
+}
+```
+
+As a little extra, I have added a **`safelist`** array with the WordPress default auto-generated links element. This way, Tailwind will always render the safe list items list whether the class is found or not. You can apply custom classes to these classes within the **`index.css`** file where the Tailwind directives are.
+
+### **Creating index.css file**
+
+Now we are already talking about the **`index.css`** file. Let's create that file and add our directives.
+
+To keep things clean, we want to create a folder called **`src`** where we hold our precompiled files. This is a common practice with most web projects. Here we create an **`index.css`** file, where we want to add our Tailwind directives.
+
+```bash
+mkdir src
+cd src
+touch index.css
+```
+
+Adding the Tailwind directives inside our **`index.css`** file.
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+If you are wondering how to add styles to generated WordPress classes, I got you covered.
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.current-menu-item {
+	@apply flex bg-red-400;
+}
+```
+
+You can do this with all the generated WordPress classes. But remember to also add it to the safelist within the **`tailwind-config.js`** file.
+
+## **Package.json**
+
+This is the last step, and then you are all set!
+
+In the code below, you see the **`npm-run-all`** in action. We see that we want to run the **`wpstart`** and **`tailwindwatch`** script at the same time.
+
+This is done with the **`npm-run-all`** npm package with the **`--parallel`** flag.
+
+The **`tailwindwatch`** and **`tailwindbuild`** scripts both do the same thing. The only difference is that one continuously watches for changes, and the other compiles it only once.
+
+These Tailwind scripts basically use the **`index.css`** file as input and output into a file called **`index.css`**, which lives in the **`build`** folder.
+
+```json
+{
+    "name": "laupblog",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "buildwp": "wp-scripts build",
+        "build": "npm-run-all --sequential buildwp tailwindbuild",
+        "wpstart": "wp-scripts start",
+        "start": "npm-run-all --parallel wpstart tailwindwatch",
+        "tailwindbuild": "tailwindcss -i ./src/index.css -o ./build/index.css --minify",
+        "tailwindwatch": "tailwindcss -i ./src/index.css -o ./build/index.css --watch --minify",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@wordpress/scripts": "^26.4.0",
+        "npm-run-all": "^4.1.5",
+        "tailwindcss": "^3.3.2"
+    }
+}
+```
+
+## **Connect index.css**
+
+Now we need to add our **`index.css`** asset file into our custom WordPress. This is done within the **`functions.php`** file.
+
+```php
+<?php
+
+function loadAssets(){
+    wp_enqueue_style("mainstyle", get_theme_file_uri("/build/index.css"));
+}
+
+add_action("wp_enqueue_scripts", "loadAssets");
+
+```
+
+And that’s it!
+
+Now you can use your favorite CSS library and go crazy with styling on every WordPress custom theme project.

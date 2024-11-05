@@ -1,0 +1,65 @@
+---
+title: "Package.json explained"
+publishedAt: "2024-02-17"
+description: "A detailed explanation of the package.json file in Node.js"
+englishOnly: "true"
+banner: "techblog/thumbnails/shopping_cart"
+tags: "nodejs,typescript,javascript"
+---
+If you have built, created, or reviewed a project that uses Node.js, you've probably seen these files before. They are called **`package.json`** and **`package-lock.json`**. These files are always there and necessary to correctly run a Node.js project.
+
+But what are these files?
+
+And how are they created?
+
+Let's dive into that and discover them!
+
+## NPM
+
+With the installation of the Node.js engine, you will simultaneously install the npm software. I assume that you already know what Node.js is for. But for those who don’t, Node.js is an engine that allows you to write JavaScript on the server side.
+
+NPM, on the other hand, stands for Node Package Manager. You can think of it as a library of JavaScript software packages. This manager allows you to install these software packages with your terminal and implement the installed software packages within your own project.
+
+Now that you have a basic understanding of what NPM is, we can start exploring the **`package.json`** and **`package-lock.json`** files.
+
+## Package.json file
+
+To simplify the explanation, let's use a shopping list analogy for understanding the **`package.json`** file. Imagine a Node.js project as a recipe you want to make. But to make this recipe, you need to gather all the necessary ingredients.
+
+The list of ingredients you need represents the **`package.json`** file. Now, imagine going to the store to grab all the ingredients listed on your shopping list. After bringing them home, you can use these ingredients to cook the recipe!
+
+This is precisely what the **`package.json`** file does. But instead of physical ingredients, these are open-source Node.js packages. These packages contain code that other people have written.
+
+All of these packages, or ingredients, are stored inside the **`node_modules`** folder in your project directory. Often, there are more packages stored inside this **`node_modules`** folder than those listed in your shopping list (i.e., **`package.json`** file). This is because some packages rely on other packages to work, and those packages may rely on even more packages.
+
+When you download a project from GitHub or any other source, the **`node_modules`** folder is (hopefully) not included with your project. Therefore, you need to fetch the ingredients from the internet and bring them into your project. This is done by running **`npm install`** within your terminal in the directory of the project.
+
+## Versioning
+
+ 
+
+Next to the name of the package, you will see the version number of the package. This versioning system consists of three numbers. The first one is called the major version, the second is the minor version, and the third and last one is the patch number.
+
+- **`1`**: This is the major version number. Major versions typically introduce breaking changes.
+- **`2`**: This is the minor version number. Minor versions add functionality in a backwards-compatible manner.
+- **`3`**: This is the patch version number. Patch versions include backwards-compatible bug fixes.
+
+But sometimes (more often than not, to be honest), you will see that the versioning has this caret symbol (^) in front of it:
+
+```html
+"test": "^1.2.3"
+```
+
+The caret symbol signifies that the version can range from 1.2.3 to 2.0.0 whenever the packages are being fetched from the internet.
+
+But how do you ensure the project has the exact versions of the packages? Or even more importantly, are the exact versions of the packages somewhere saved or locked down? The answer is yes for both questions.
+
+## Package.lock.json
+
+Every time you run the command **`npm install`**, it will re-install the **`package-lock.json`** file. This file is where the exact versions of all the packages are locked in, hence the name **`package-lock.json`**. This list is often longer because it not only holds the packages you request but also the packages that the requested packages depend on.
+
+If you don’t want to reinstall the packages but instead want to install the packages from the **`package-lock.json`**, you can opt to use the **`npm ci`** command.
+
+That's it for the two most important files of every Node.js project. I hope you learned something today!
+
+Happy coding!

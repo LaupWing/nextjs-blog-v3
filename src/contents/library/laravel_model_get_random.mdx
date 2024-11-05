@@ -1,0 +1,44 @@
+---
+title: "Laravel: Get random model"
+tags: "laravel,php"
+publishedAt: "2024-02-01"
+description: "A few ways of retrieving an random database record with Laravel Model."
+---
+
+> Laravel get random model
+
+Within Laravel there are many different ways to implement foreign keys. The way you choose to implement them doesn't matter, but it's important to be consistent.
+
+So choose the one that works best for you and stick with it.
+
+## Code
+
+```php
+class GenreBookFactory extends Factory
+{
+    public function definition(): array
+    {
+      return [
+        "book_id" => Book::all()->random()->id
+      ];
+    }
+}
+```
+
+However, there's a more effective approach! Import ComponentPropsWithoutRef and assign it to the element you want to set props for.
+
+## Code
+
+```php
+class GenreBookFactory extends Factory
+{
+    public function definition(): array
+    {
+      return [
+        "book_id" => Book::all()->random()->id
+      ];
+    }
+}
+```
+
+This method enhances the development experience by letting TypeScript infer and enforce the correct props for the specified HTML element.

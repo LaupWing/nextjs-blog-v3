@@ -1,0 +1,31 @@
+---
+title: "React, TypeScript: JSX Element Auto-Completion"
+tags: "typescript,react"
+publishedAt: "2023-12-14"
+description: "Improve React development efficiency using ComponentPropsWithoutRef."
+---
+
+> React, TypeScript: JSX Element Auto-Completion
+
+Many developers define an interface named `Props` for their React components and consider it sufficient.
+
+```jsx
+interface Props {
+  children?: React.ReactNode
+  some_prop: string
+}
+```
+
+However, there's a more effective approach! Import ComponentPropsWithoutRef and assign it to the element you want to set props for.
+
+## Code
+
+```jsx
+import type { FC, ComponentPropsWithoutRef } from "react"
+
+export const DivContainer: FC<ComponentPropsWithoutRef<"div">> = () => (
+    <div></div>
+)
+```
+
+This method enhances the development experience by letting TypeScript infer and enforce the correct props for the specified HTML element.

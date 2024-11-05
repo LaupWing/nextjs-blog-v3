@@ -1,0 +1,152 @@
+---
+title: "Lockkey"
+description: "LockKey is a web application for secure password management, leveraging Vue, Next.js, and Firebase."
+publishedAt: "2024-01-01"
+techs: "nextjs,tailwindcss,firebase,typescript"
+banner: "techblog/lockkey/deareicix2xzcnfyghc7"
+github: "https://github.com/LaupWing/dronestart-vue3-refactor"
+---
+
+Hello, and welcome to my explanation article about a password management web application I have built. If you are interested in the source code, this is my GitHub link. The link is also available in the description below. The same goes for the link to the password manager itself.
+
+> ## **Technologies Used**
+
+For this project, I used the following technologies:
+
+- Vue & Next.js: No, I have not built one application using both frameworks. I built the first edition of this application using Vue around three years ago. Back then, Next.js was still in the early versions. Recently, I switched over to Next.js or plain React.js for my web applications.
+- Firebase: I wanted to primarily focus on the front end for this project, so I opted for a low-maintenance and easy-to-implement backend system, which is Firebase.
+
+<blockquote className='with-icons'>
+  ## Tech Stack Used
+  <div className='not-prose mt-2'>
+    <TechIcons techs={['nextjs', 'tailwindcss', 'firebase']} />
+  </div>
+</blockquote>
+
+
+> ## **Encryption**
+
+Before we go through the web application, let’s first explain how I encrypted the passwords that will be saved in the database. The passwords stored on the web app will be encrypted instead of stored in plain text. But how does this encryption work?
+
+If the user creates an account, the account will be assigned a master key. This key is not saved in the database; in fact, it is not even shown to the user. What will be shown to the user is a secret key. Simultaneously, there will be an encryption key saved and created in the database. The master key is encrypted with a secret key of the user and the decryption key, which is saved in the database.
+
+This encryption pattern is inspired by One Password. One Password also saves users' passwords using this encryption pattern. There is a master key that encrypts all the saved passwords from the users. This master key is encrypted by the encryption key, which is stored in the database, and the secret key, which is given to the user.
+
+This way, there is no way for anyone else, even us, to decrypt the passwords saved by the users from the application. Because the secret key is given to the user and not saved in our database. The only significant downside to this is that if the user loses his or her secret key, it is impossible to decrypt their passwords ever again.
+
+Now that I've explained how the encryption works, let’s hop into the application.
+
+> ## **Login**
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/niuwg63psx7fms99gcbn"
+  alt="login"
+  width={1424}
+  height={754}
+/>
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/uqfcdjfa9zzlm0hcfq5a"
+  alt="register"
+  width={1424}
+  height={754}
+/>
+
+If you want to follow along or look at the web application by yourself, you can go to lockkey.com to view the web application. When first entering the website, you will be shown a login screen. Here, the user can either log in if they already have an account or, of course, use the secret key. If they are brand new, they can click on "Register" and create an account.
+
+Let’s assume we are brand new and register an account. Just like most other web applications, you are required to log in with an email and password. After filling in those fields, this button will be enabled. Click on that button to generate your secret key. You mustn’t lose this secret key.
+
+I have explained the reason why in the encryption part of this video. But to reiterate it: the secret key is used to encrypt all your passwords. This secret will not be stored in the database for privacy reasons. So if this key is lost, all the passwords cannot be decrypted.
+
+After registering an account, the user will be redirected to the home screen of this application. The initial interface is empty with no items, which is logical because we just created our account. Before we add a new password, we are going through the top navigation.
+
+> ## **Top Navbar**
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/gux4vblqrv5sgvg116vh"
+  alt="Top navbar"
+  width={1424}
+  height={754}
+/>
+
+
+On the top, you have a little navbar. It's kind of straightforward, but let’s go through it regardless. On the left, you got the current route you are on. Currently, we are on the "All Items" route. If we hop into another route or subroute, this will be reflected here.
+
+On the right on the top navbar, you get the timer and account actions menu. Because this is a password web application, I have chosen to create an automatic logout system. Imagine if you leave your PC and forget you have this tab open. Another person who uses your PC will probably see all your passwords. That is why I have a built-in auto-logout system.
+
+When the timer hits 0, the user will be logged out automatically from the web application. The timer starts at 30 minutes.
+
+To the right of the timer, you get the user account menu. Which is currently hidden. To see the account menu, just simply click on the account, and it will open the account menu. Here the user can select the option he or she wants. Both "Help" and "Settings" are currently not in production, so the only function that works is the logout.
+
+That’s it for the top navbar for now. Let’s save a password for our Google account to see how this web application works.
+
+> ## **Storing a Password**
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/rzlrtazwjh7vn9uvjptf"
+  alt="Storing password"
+  width={1424}
+  height={754}
+/>
+
+To store a password or create a new password you want to save for another website, just click on the plus button. A popup will open up with some input fields to add the password you want to save. The first field is for the website you want to save it for. Let’s fill in "google.com" here.
+
+The name field is just how you want to save this password. You can think of it as a label, usually the name of the website you want to store. This field is only used to display it so you can identify it. The reason for this is that you can add multiple accounts to the same website. For instance, if you have multiple Google accounts, you can put the name or label of Google one here and Google two on the next one, etc. So "Google" here seems like the appropriate label.
+
+The third field is your username. This is the username you want to attach to this item.
+
+Last but certainly not least is the password itself. You can type your password here, and below it, you can see the security of the password. Red means not secure at all, orange is somewhat secure, and green is secure. If you want to review and show the password, just click on this eye icon.
+
+You can also opt-in to let the web application generate a password for you. Just simply press this blue button, and it will generate a password for you. You can also customize your password. Click on the options button below to uncollapse the password generation options.
+
+You can adjust the length of your password here and enable or disable numbers, symbols, or uppercase letters in your password. Let’s keep everything on and collapse this menu again.
+
+Now everything is filled in. The password item could be saved now, but there is one last thing that you can do which is optional. And that is putting the password in a folder. On the top of the modal, you can select this to open the folders section.
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/swedcbzxshec1gdrxnqo"
+  alt="folders"
+  width={1424}
+  height={754}
+/>
+
+Here in this section of the modal, you can save an item inside of a folder. This is primarily done for organizational purposes. But I also had the idea to enable sharing passwords from a folder. So the user can create a particular folder that could be shared with another user. But I never had the time to build this.
+
+Let’s add this particular item to a folder called "work." Press the plus icon to add this. You can see on the top that the item is added to this folder. You can add this item to multiple folders if you want to. Just keep it at "work" for now and add this item.
+
+As you can see, the item you just added is being shown in your "All Items" tab. Maybe you also noticed that a folder has appeared on the left navigation. By creating an item with a folder that has not been created yet, the web application will make a new one for you.
+
+> ## **Password Detail**
+
+<CloudinaryImage
+  mdx
+  public_id="techblog/lockkey/deareicix2xzcnfyghc7"
+  alt="folders"
+  width={1424}
+  height={754}
+/>
+
+Now let’s show the details of the item we just created. Just click on the item, and the details will be shown on the right part of the web application. Let’s start from the top down.
+
+To edit the item, just press this button with the edit icon. This opens a modal identical to the one that you saw when creating an item/storing a new password. Because we already went through this modal, we will just close this one for now.
+
+Right beside the edit button is a delete button recognizable by the trashcan icon. Kind of straightforward. If you want to remove this item, just press this button. A popup will appear to confirm the action, and after that, the item will be removed.
+
+Below that, you get the name of the item, aka the label, and the photo of the domain. This image is automatically pulled from the internet when you fill in the website URL of the item. And to the right of that, you can save this password as a favorite. This will simply save the password under your "Favorites" tab.
+
+Below that, you have all the fields that are related to the password item you stored. If you hover over the field, you can copy the field by simply pressing this copy icon.
+
+If it is a password field, you will also have the option to show the password by pressing on the eye icon.
+
+If it is a website field, you can also open the URL in a separate Chrome tab by pressing this icon.
+
+> ## **Logging Out / The End**
+
+The last part is almost as important as saving a password, which is logging out. If you forget to log out, no worries; there is a countdown timer of 30 minutes the second you log in. When the countdown is finished, you will be automatically logged out.
+
+To manually log out, just open the account menu by clicking on "Account" in the top right corner. From here, just hit the logout button, and then you will be logged out.

@@ -1,0 +1,141 @@
+---
+title: "NFT anime project"
+publishedAt: "2024-02-24"
+description: "Tried selling anime NFTs in the crypto boom—83,720 possible unique pieces, coded a 10,000-image generator, uploaded 5,000 to OpenSea."
+englishOnly: "true"
+banner: "techblog/saitama_ok/s5vsa0zaksqmjzuiknvw"
+tags: "typescript,nodejs"
+---
+
+During the NFT crypto boom a few years ago, around the time of COVID, individuals were raking in substantial profits from crypto investments. Even a twelve-year-old could amass around three hundred grand. Inspired, I thought, "I can program. Why not try deploying my own NFT and potentially make some profit?" I'm well aware of the skepticism surrounding NFTs, and I'm not endorsing that anyone should purchase mine. In fact, they're not currently for sale. I simply want to share my journey.
+
+I broke down this venture into multiple phases:
+
+### **Phase 1: What should the NFT be like?**
+
+This phase was surprisingly straightforward for me. As a anime enthusiast, I had already created some artwork featuring anime themes. My favorite piece depicted a scene from One Punch Man, specifically the epic battle between Saitama and Boros.
+
+To align with the typical NFT collection structure, I designed my pieces with four layers: weapon, clothing (body), hat, and background color. With 26 clothing options, 35 hats, 23 weapons, and 4 backgrounds, the combinations resulted in a 83,720 unique possibilities.
+
+For those interested in how I created these artworks with Illustrator, feel free to reach out! I will create a separate tutorial on the process if there is enough enthusiasm for it.
+
+### **Phase 2: Writing the code to combine**
+
+The next step involved writing code to combine these various images. In essence, the code generates images by combining body, hat, weapon, and background. Weapons are optional, with a 50 percent chance of inclusion. I implemented measures to prevent the creation of duplicate images, capping the unique images at 10,000. If there is enough enthusiasm, I will create a separate article explaining the code.
+
+```typescript
+import sharp from 'sharp'
+import fs from 'fs'
+import data from './data.json'
+import path from 'path'
+import { Head, Body, Weapon } from './typings'
+
+interface Parts {
+   head: Head
+   body: Body
+   weapon: Weapon
+   background: string
+}
+
+interface PartsKeys{
+   head: "head",
+   body: "body",
+   weapon: "weapon",
+   background: "background"
+}
+
+const pickRandom = (array:Array<any>) =>{
+   return array[Math.floor(Math.random() * array.length)]
+}
+
+const alreadyExists = (parts:Parts): Boolean =>{
+   const results:Array<Parts> = JSON.parse(fs.readFileSync(path.join(__dirname + '/results/results.json'), {encoding: 'utf-8'}))
+   return results.find(x=> 
+      x.background === parts.background && 
+      x.body.name === parts.body.name &&
+      x.head.name === parts.head.name &&
+      x.weapon.name === parts.weapon.name
+   ) ? true : false
+}
+
+const notMatchable = (parts:Parts):Boolean =>{
+   return parts.body.not_matchable.find(x=>x===parts.head.name) ? true: false
+}
+
+const pickParts = ():Parts=>{
+   return {
+      head: pickRandom(data.heads), 
+      background: pickRandom(data.backgrounds), 
+      body: pickRandom(data.bodies), 
+      weapon: pickRandom(data.weapons) 
+   }
+}
+
+const generate = async (parts:Parts, id:number) =>{
+   const results = JSON.parse(fs.readFileSync(path.join(__dirname + '/results/results.json'), {encoding: 'utf-8'}))
+   
+   const added_to_results = [...results, {...parts, id}]
+   fs.writeFileSync(path.join(__dirname + '/results/results.json'), JSON.stringify(added_to_results))
+   await sharp(`./assets/Backgrounds/${parts.background}.png`)
+      .composite([
+         ...Object.keys(parts)
+            .filter(x=>x !== 'background')
+            .map(a=>({
+               ...(parts as any)[a],
+               part: a
+            }))
+            .sort((a:any,b:any)=>{
+               return a.order - b.order
+            })
+            .map(a=>{
+               let part
+               if(a.part === 'weapon'){
+                  part = 'Weapons'
+               }
+               else if(a.part === 'body'){
+                  part = 'Bodies'
+               } 
+               else if(a.part === 'head'){
+                  part = 'Heads'
+               }
+               return {
+                  input: `./assets/${part}/${a.name}.png`
+               }
+            })
+         ]
+      )
+      .toFile(`./results/images/${id}.png`)
+
+   console.log('Finished id: ', id)
+}
+
+const bulkGenerate = (total: number) =>{
+   let id = 0
+   while(id < total){
+      const parts = pickParts()
+      if(!alreadyExists(parts) && !notMatchable(parts)){
+         id++
+         generate(parts, id)
+         console.log(`generated total of ${id}`)
+      }
+   }
+}
+
+bulkGenerate(10000)
+```
+
+### **Phase 3: Uploading all the NFTs, well, partially at least**
+
+After creating all the NFT art, the logical next step was to upload these images to an NFT platform. I chose OpenSea, the leading NFT trading platform at the time. Initially planning to automate the upload process with code, I faced a setback when OpenSea implemented a captcha check on the same day. Unable to bypass the captcha, I resorted to manually uploading about 5000 NFTs, a time-consuming process.
+
+### **Phase 4: The missing phase?**
+
+Initially, I assumed creating and uploading the NFTs would be sufficient, with sales flowing in automatically. However, reality struck—sales required marketing efforts. Regrettably, I had put zero effort into marketing my NFTs, leading to minimal views on my collection.
+
+To rectify this, I chose to organically grow awareness on Instagram. I posted the NFTs three times a day, including the OpenSea link for potential buyers, for about a month.
+
+### **How much did I make?**
+
+After all the effort—creating images, coding combinations, manual uploads, and marketing on Instagram—how much did I make? The answer is precisely zero dollars. Despite having some views on my collections, it was far too little to make a single sale.
+
+The key lesson here is that marketing plays a pivotal role in making money online. This applies to any online endeavor, be it a freelance service or a product. Without visibility, you'll make zero dollars online.

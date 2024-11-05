@@ -1,0 +1,138 @@
+---
+title: "Shopify: How to add tailwind to shopify theme development"
+tags: "liquid,javascript,shopify"
+publishedAt: "2024-03-28"
+description: "In this short article, I will show you how you can easily add Tailwind to your Shopify theme deveopment pipeline."
+---
+> Shopify: How to add tailwind to shopify theme development
+
+In this short article, I will show you how you can easily add Tailwind to your Shopify theme deveopment pipeline, so that you can use Tailwind for every custom Shopify theme development project.
+
+## **Create project**
+
+First, create a directory where you want to place your project files.
+
+Then, **`cd`** into that project.
+
+```bash
+mkdir project
+cd project
+```
+
+Now, create a folder called **`theme`**. This is the directory where you'll hold all your theme-specific files. You can either create your theme files manually or create them with the Shopify CLI command by pulling or creating a boilerplate. I won’t go into this step because I want to primarily focus on how to add Tailwind to a Shopify project.
+
+Now let's move on to the steps for setting up Tailwind.
+
+## **package.json**
+
+We need to initialize this project with npm by using the **`npm init`** command in the root directory.
+
+```bash
+npm init --y
+```
+
+We have added the **`--y`** flag to set all the package JSON info as the default.
+
+Now, we can get into the steps for initializing Tailwind.
+
+## **Adding Tailwind**
+
+Here is a brief overview of how to add Tailwind to this project.
+
+### **Install Tailwind CSS**
+
+Use npm to install Tailwind and initialize the Tailwind configuration file.
+
+```bash
+npm install -D tailwindcss
+npx tailwindcss init
+```
+
+The command will create a file called **`tailwind.config.js`**.
+
+## **Configure template paths**
+
+Now, we need to tell Tailwind which files to check for Tailwind classes. Since we are building a Shopify theme with Liquid files, we need to specify the location of the Liquid files. In our case, the actual Shopify theme project lives in the **`theme`** folder. So, we need to correctly specify it here.
+
+```jsx
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    content: ["./theme/**/*.liquid"],
+    theme: {
+        extend: {},
+    },
+}
+```
+
+It basically watches for every Liquid file within the theme directory.
+
+## **Creating CSS file and adding the directives**
+
+Within the root directory, create an **`index.css`** file.
+
+Inside this file, we will simply add the Tailwind directives.
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## **Tailwind command**
+
+Now, we need to add an npm command within our **`package.json`** file to run the Tailwind compiler.
+
+```json
+{
+    "scripts": {
+        "tw": "npx tailwindcss -i ./style.css -o ./theme/assets/style.css --watch"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.4.1"
+    }
+}
+```
+
+Notice that the output file will be generated within the **`assets`** directory that is within the theme directory.
+
+## **Adding `style.css` to Shopify theme**
+
+Now, we only need to include the generated **`style.css`** into our Shopify project.
+
+To do this, you need to put the **`{{ "style.css" | asset_url | stylesheet_tag }}`** liquid code snippet inside the layout of your theme (**`layout > theme.liquid`**).
+
+```html
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <title>
+        {{ page_title }}
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    {{ "style.css" | asset_url | stylesheet_tag }}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+    {{ content_for_header }}
+</head>
+
+<body class="flex min-h-screen flex-col items-center">
+    {% render "announcement" %}
+    {% render "header" %}
+
+    {{ content_for_layout }}
+    {% render "footer" %}
+</body>
+
+</html>
+```
+
+That’s it!
+
+Now you can use your favorite CSS library with every Shopify project you are going to build.

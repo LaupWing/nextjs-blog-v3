@@ -1,0 +1,130 @@
+---
+title: "CSS: Tailwind Layers"
+tags: "css,react"
+publishedAt: "2024-03-25"
+description: "With the most popular utility-first CSS framework, Tailwind, you can organize classes into different layers for flexibility and customization."
+---
+> CSS: Tailwind Layers
+
+With the most popular utility-first CSS framework, Tailwind, you can organize classes into different layers for flexibility and customization. These layers help developers manage specificity, improve maintainability, and customize the framework to suit their specific needs.
+
+The available layers are `base`, `components`, and `utilities`.
+
+```css
+@layer base {
+    /* Base styles */
+    body {
+        @apply font-sans antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-bold;
+    }
+
+    a {
+        @apply text-blue-500;
+    }
+
+    a:hover {
+        @apply text-blue-700;
+    }
+}
+
+@layer components {
+    /* Component styles */
+    .btn {
+        @apply inline-block py-2 px-4 rounded bg-blue-500 text-white font-bold;
+    }
+
+    .btn:hover {
+        @apply bg-blue-700;
+    }
+
+    .card {
+        @apply bg-white rounded shadow-md p-4;
+    }
+}
+
+@layer utilities {
+    .filter-none {
+        filter: none;
+    }
+    .filter-grayscale {
+        filter: grayscale(100%);
+    }
+}
+```
+
+In this article, we will delve into these layers, where to categorize specific CSS rules, and more!
+
+## `base` layer:
+
+The base layer is primarily the place where you should define your typical HTML elements like **`body`**, **`h1`**, etc.
+
+Base styles are useful for setting global defaults and establishing a consistent design foundation across your project.
+
+```css
+@layer base {
+    /* Base styles */
+    body {
+        @apply font-sans antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-bold;
+    }
+
+    a {
+        @apply text-blue-500;
+    }
+
+    a:hover {
+        @apply text-blue-700;
+    }
+}
+```
+
+## `components` layer:
+
+The components layer is used for reusable components. You can think of navigation items, buttons, cards, etc.
+
+If you are familiar with frontend frameworks like React, Vue, or Angular, you probably know right away what I mean with reusable components.
+
+You can create specific classes for each component and apply the styles you want to it.
+
+```css
+@layer components {
+    /* Component styles */
+    .btn {
+        @apply inline-block py-2 px-4 rounded bg-blue-500 text-white font-bold;
+    }
+
+    .btn:hover {
+        @apply bg-blue-700;
+    }
+
+    .card {
+        @apply bg-white rounded shadow-md p-4;
+    }
+}
+
+```
+
+## `utilities` layer:
+
+This layer is used for the more specific styles that will be directly applied to the elements.
+
+Utility classes are low-level classes that provide single-purpose styling utilities like margin, padding, text alignment, colors, etc.
+
+They follow a consistent naming convention (e.g., `.filter-none` for removing a filter or `.filter-grayscale` for adding the grayscale filter), allowing for rapid prototyping and customization.
+
+```css
+@layer utilities {
+    .filter-none {
+        filter: none;
+    }
+    .filter-grayscale {
+        filter: grayscale(100%);
+    }
+}
+```

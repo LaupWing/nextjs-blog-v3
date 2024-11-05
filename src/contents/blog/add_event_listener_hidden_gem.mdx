@@ -1,0 +1,103 @@
+---
+title: " Unveiling a Hidden Gem: The addEventListener Method's Secret Power"
+publishedAt: "2024-03-17"
+description: "After 8 years of programming, I discovered that the addEventListener method has an optional third parameter, which allows you to add extra options. These are capture, once, and passive."
+englishOnly: "true"
+banner: "techblog/thumbnails/surprise"
+tags: "typescript,javascript"
+---
+Lately, I’ve been using vanilla JavaScript again after a long break due to the usage of frontend frameworks. I was forced to use vanilla JavaScript again.
+
+One of the most used vanilla JavaScript methods is **`addEventListener`**. For those who don’t know, it adds an event listener, like a click event, focus event, mouseover event, etc., to an element. You can then trigger a function to do something.
+
+```jsx
+some_element.addEventListener("click", () => {
+	console.log("Click event has been triggered");
+});
+
+```
+
+In the example above, a console log statement will be printed every time the element is clicked. What if you had a scenario where you wanted to trigger the click event only once? Well, back in the day, I removed the event listener right after the click event had been triggered.
+
+```jsx
+const logStatement = () => {
+	console.log("Click event has been triggered");
+	some_element.removeEventListener("click", logStatement);
+};
+
+some_element.addEventListener("click", logStatement);
+
+```
+
+Back in the day, you needed to reference the function whenever you wanted to remove an event listener. So it was mandatory to separate the function in order to make this work.
+
+As you can imagine, this was a real pain to deal with.
+
+Just recently, I discovered that there was a much easier way to solve this problem… And that after 8 years of programming!
+
+So, I discovered that the **`addEventListener`** method has an optional third parameter, which allows you to add extra options.
+
+These are **`capture`**, **`once`**, and **`passive`**.
+
+You probably have already guessed it. **`once`** is the one you need to listen to an event only once and then never again.
+
+Here is a short explanation of them:
+
+## **`once`**
+
+This option makes the event only trigger once and removes it afterwards. This is handy for events that you only want to handle once after the first time the user interacted with it. From the top of my head, this option is especially handy for listening to the **`transitionend`** or **`animationend`** events.
+
+```jsx
+some_element.addEventListener("animationend", () => {
+	console.log("Animation has ended");
+}, {
+	once: true
+});
+
+```
+
+## **`capture`**
+
+Events can be dispatched in two phases, namely the capturing phase and the bubbling phase. By default, event listeners are captured in the bubbling phase. Meaning that the event is first captured down to the target element and then bubbles up. If you set **`capture`** to **`true`**, the event listener is executed during the capturing phase. Meaning it goes from top to down, from parent to child.
+
+```jsx
+some_parent_element.addEventListener("click", () => {
+	console.log("Parent captured");
+}, {
+	capture: true
+});
+
+some_child_element.addEventListener("click", () => {
+	console.log("Child captured");
+}, {
+	capture: true
+});
+
+```
+
+In the example above, the console log statement of the parent element will first be triggered and then from the child element.
+
+## **`passive`**
+
+With the **`passive`** option, you tell the browser that the event listener does not call **`preventDefault()`**. This is particularly useful for touch and wheel events where you want smoother scroll experiences and performance. When set to **`true`**, it informs the browser that it can safely perform the default action without waiting for the listener to complete, thus potentially increasing the scrolling performance on touch devices.
+
+You may be wondering why that is the case. By default, **`preventDefault()`** is not called unless it is explicitly instructed. The reason that this helps with performance is that the browser waits before the event handler has finished executing before it can know whether **`preventDefault()`** has been called or not. This waiting can cause delays in handling scrolling or touch interactions, leading to noticeable jank or stutter in the user experience, especially on less powerful devices.
+
+Here's the key part: even though most touch or scroll event listeners might not call **`preventDefault()`**, the browser can't assume this ahead of time. It must wait for the event handler to run to be sure, because if **`preventDefault()`** is called, the browser's default action (like scrolling) should not be performed.
+
+By marking an event listener as **`{ passive: true }`**, you're explicitly telling the browser, "I'm not going to call **`preventDefault()`** in this event handler." With this information, the browser can immediately proceed with its default action (like scrolling) without waiting for the event handler to complete, thus potentially improving the scrolling performance and responsiveness of the page.
+
+```jsx
+some_element.addEventListener("touchstart", () => {
+	console.log("Touch event triggered");
+}, {
+	passive: true
+});
+
+```
+
+That's it! Hope you learned something. It is unbelievable that I just recently discovered that there is an optional third parameter for the **`addEventListener`** method.
+
+The **`once`** option came in handy for some cases for sure. But hopefully, it is helpful for you, and you got something from it.
+
+Happy coding!

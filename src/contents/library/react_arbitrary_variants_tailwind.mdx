@@ -1,0 +1,48 @@
+---
+title: "React: Arbitrary Variants Tailwind"
+tags: "tailwindcss,react"
+publishedAt: "2023-12-24"
+description: "Style third party react components easily with arbitrary variants of tailwind"
+---
+
+> React: Arbitrary Variants Tailwind
+
+## Before version 3.1
+
+Ever since version 3.1 of Tailwind CSS, a new syntax allows you to create custom styles directly in your HTML. This feature is particularly useful for styling components in React that you don’t have control over, such as those from third-party npm packages.
+
+Imagine you have a Paragraph component from a React UI library:
+
+```jsx
+import Paragraph from "some-react-ui-package"
+
+const HelloWorld = () => {
+    return (
+        <div>
+            <Paragraph />
+        </div>
+    )
+}
+```
+
+Before the introduction of arbitrary variants in Tailwind, you had to manually grab a specific selector on the element and add it to your CSS file. However, with arbitrary variants, you can now select specific elements using CSS selectors within square brackets.
+
+## After version 3.1
+
+In the example below, the & symbol is used to select the child element (borrowed from SCSS or SASS), and the underscore \_ represents a space. After the underscore, you put the element of choice (in this case, the paragraph element).
+
+Follow that with a colon : and the Tailwind class you want to apply to that CSS selector. That's it for Tailwind arbitrary variants!
+
+```jsx
+import Paragraph from "some-react-ui-package"
+
+const HelloWorld = () => {
+    return (
+        <div className="[&_p]:text-red-400">
+            <Paragraph />
+        </div>
+    )
+}
+```
+
+In this example, we've selected the paragraph child from the div element and applied the Tailwind class text-red-400 to it.

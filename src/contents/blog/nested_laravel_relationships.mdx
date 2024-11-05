@@ -1,0 +1,53 @@
+---
+title: "Nested Laravel Relationships"
+publishedAt: "2024-02-17"
+description: "So you can use nested relationship within Laravel models… What awesome!"
+englishOnly: "true"
+banner: "techblog/thumbnails/two_birds"
+tags: "laravel,api"
+---
+
+The code snippet below is part of a Laravel model called **`Message`** in one of my personal projects. To grasp its significance, I'll provide some necessary context without delving into the entire application's functionality.
+
+Within the **`Message`** model, there's a method named **`message_data`**. For those unfamiliar with it, **`message_data`** is used for lazy loading. To appreciate the brilliance of this code, it's essential to understand lazy loading, but I'll keep it brief for now.
+
+This method facilitates retrieving **`message_data`** by employing the **`with`** method on the model. This automates the extraction of data from another table linked through a foreign key.
+
+```php
+public function message_data()
+{
+    return $this->belongsTo(
+        $this->hasOne(MessageType::class, "id", "message_type_id")->first()->data_model,
+        "messageable_id",
+        "id"
+    );
+}
+```
+
+If this still seems a bit unclear, let me elaborate further on the **`Message`** model. In my project, a message can be either an email or an SMS, establishing a polymorphic relationship. To achieve this, I include a field to hold the polymorphic table's ID, typically suffixed with **`able`** to signal Laravel's understanding of its role in polymorphism.
+
+The second part involves a field indicating the model, conventionally named with the **`_type`** suffix. However, I've opted for clarity, labeling it **`data_model`**.
+
+Here's an example value:
+
+```php
+
+App\Models\Email
+```
+
+which references the email model within the project.
+
+Initially, I could have utilized Laravel's basic polymorphic approach to fetch **`message_data`**. However, due to project requirements—specifically, allowing users to switch between SMS and email types of messages—I needed a different approach.
+
+Now, let's revisit the code snippet to understand its functionality.
+
+The code first retrieves the current relationship table from the **`message_type`** table, which could be either SMS or email. After obtaining this information, it extracts the string value of the data model:
+
+```php
+
+$this->hasOne(MessageType::class, "id", "message_type_id")->first()->data_model
+```
+
+This can result in **`\App\Models\Email`**. Using this dynamic model, it creates a **`belongsTo`** relationship within the **`Message`** model. Resulting in dynamic belongsTo relationship from a related table, allowing the user to switch from sms to email and vice versa.
+
+The remarkable aspect lies in Laravel's ability to leverage one relationship functionality within another. It's truly impressive that you can nest relationships, enhancing the flexibility and power of the framework.

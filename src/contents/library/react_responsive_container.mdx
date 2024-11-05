@@ -1,0 +1,68 @@
+---
+title: "React: Creating a Responsive Tailwind Container"
+tags: "react"
+publishedAt: "2023-12-07"
+description: "Setting up Absolute Imports with jsconfig"
+---
+
+> React: Creating a Responsive Tailwind Container in React
+
+Are you looking to create a quick and responsive Tailwind container for your React project? Let's dive into a simple guide to achieve just that.
+
+## Step 1: Set Up Your React Project
+
+Assuming you have a base React project with Tailwind installed, start by creating a new file named ResponsiveContainer.jsx.
+
+```jsx
+import React from "react"
+
+const ResponsiveContainer = ({ children }) => {
+    return <div>{children}</div>
+}
+
+export default ResponsiveContainer
+```
+
+## Step 2: Make It Responsive
+
+Since this is a container element, pass a children prop to the component. This allows you to inject content dynamically.
+
+```jsx
+ResponsiveContainer.jsx
+
+import React from "react"
+
+const ResponsiveContainer = ({ children }) => {
+    return <div>{children}</div>
+}
+
+export default ResponsiveContainer
+```
+
+Next, let's add Tailwind classes to make the container responsive. Start with the full-width class and then set a maximum width.
+
+```jsx
+import React from "react"
+
+const ResponsiveContainer = ({ children }) => {
+    return <div className="w-full max-w-sm">{children}</div>
+}
+
+export default ResponsiveContainer
+```
+
+## Step 3: Add Margins (Optional)
+
+If you want to create some spacing around the container, simply add margins.
+
+```jsx
+import React from "react"
+
+const ResponsiveContainer = ({ children }) => {
+    return <div className="w-full max-w-sm m-4">{children}</div>
+}
+
+export default ResponsiveContainer
+```
+
+And there you have it! A responsive Tailwind container for your React project. Feel free to adjust the classes based on your design preferences.

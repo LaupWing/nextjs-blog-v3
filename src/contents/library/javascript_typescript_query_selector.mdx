@@ -1,0 +1,32 @@
+---
+title: "Javascript, Typescript: Matching classes querySelector"
+tags: "javascript,typescript"
+publishedAt: "2024-01-15"
+description: "This code snippet explains how to use querySelectorAll to match HTML classes using different selectors."
+---
+
+> Matching classes querySelector
+
+## class exactly matches abc
+
+```ts
+const exactAbc = document.querySelectorAll("[class='abc']")
+```
+
+## class begins with abc
+
+```ts
+const containsAbc = document.querySelectorAll("[class*='abc']")
+```
+
+## class contains white-space separated word exactly matching abc
+
+```ts
+const containsAbc = document.querySelectorAll("[class~='abc']")
+```
+
+## class ends with abc
+
+```ts
+const endsWithAbc = document.querySelectorAll("[class$='abc']")
+```

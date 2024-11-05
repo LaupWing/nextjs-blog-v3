@@ -1,0 +1,53 @@
+---
+title: "React: New way of handling navigation in Next.js"
+tags: "typescript,javascript,react"
+publishedAt: "2024-03-26"
+description: "Learn how to handle navigation in Next.js using the new hooks."
+---
+> React: New way of handling navigation in Next.js
+
+Starting from version 13 of Next.js, you need to access router information through different hooks. In previous versions, you could manage all your router and navigation functionalities with a single **`useRouter`** hook.
+
+```jsx
+import { useRouter } from 'next/router'
+```
+
+With this single router hook, you could practically handle anything related to routes, such as redirecting, replacing, and getting query parameters.
+
+But now, you have to pull router information from different hooks to achieve the same functionality. In this blog post, we will go over them.
+
+```jsx
+import {
+	useRouter,
+	usePathname,
+	useSearchParams,
+	useParams
+} from 'next/navigation'
+```
+
+## **`useParams`**
+
+The **`useParams`** function in Next.js is a client-side component hook that allows you to access dynamic parameters from the current URL. It returns an object containing the filled-in dynamic parameters, where each property represents a segment from the route with its corresponding value. This enables you to dynamically render components based on the current route's parameters, facilitating flexible and interactive web applications.
+
+**Example**: For instance, if your route is **`/shop/[tag]/[item]`** and your URL is **`/shop/shoes/nike-air-max-97`**, **`useParams`** would return **`{ tag: 'shoes', item: 'nike-air-max-97' }`**.
+
+## **`useRouter`**
+
+A client-side component hook provided by Next.js for programmatically changing routes inside Client Components. Typically, use the **`<Link>`** component for navigation, unless specific requirements dictate using **`useRouter`**.
+
+**Functionality**:
+
+- **`router.push(href: string, { scroll: boolean })`**: Performs client-side navigation to the provided route, adding a new entry into the browser’s history stack.
+- **`router.replace(href: string, { scroll: boolean })`**: Performs client-side navigation to the provided route without adding a new entry into the browser’s history stack.
+- **`router.refresh()`**: Refreshes the current route, making a new request to the server, re-fetching data requests, and re-rendering Server Components.
+- **`router.prefetch(href: string)`**: Prefetches the provided route for faster client-side transitions.
+- **`router.back()`**: Navigates back to the previous route in the browser’s history stack.
+- **`router.forward()`**: Navigates forwards to the next page in the browser’s history stack.
+
+## **`useSearchParams`**
+
+**`useSearchParams`** is a client-side component hook in Next.js that enables you to read the current URL's query string parameters. It returns a read-only version of the **`URLSearchParams`** interface, allowing you to access and manipulate the query string.
+
+## **`usePathname`**
+
+**`usePathname`** is a client-side component hook in Next.js that allows you to read the current URL's pathname. It returns a string representing the current pathname, enabling you to dynamically respond to changes in the URL's path within your client-side components. This hook is particularly useful for building interactive web applications where you need to conditionally render components based on the current URL.

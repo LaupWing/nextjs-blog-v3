@@ -1,0 +1,22 @@
+---
+title: "Mysql: Import Large Database into sql"
+tags: "bash,mysql,sql"
+publishedAt: "2024-02-22"
+description: "How to import database (I've done this with 10gb databases) into sql"
+---
+
+> Mysql: Importa Large Database into sql
+
+How to import large database (I've done this with 10gb databases) into sql with just one line of code. This is an even better option than using a software like phpmyadmin or mysql workbench.
+
+```bash
+mysql -u username -p database_name < database.sql
+```
+
+That's it! You can also use this to export a database.
+
+```bash
+mysqldump -u username -p database_name > database.sql
+```
+
+Note: the database.sql file must be in the same directory as the command is run. Otherwise you must specify the path to the file.

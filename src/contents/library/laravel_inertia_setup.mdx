@@ -1,0 +1,238 @@
+---
+title: "Laravel: Inertia.js, React and Typescript setup"
+tags: "laravel,php"
+publishedAt: "2024-03-04"
+description: "The base setup for a Laravel, Inertia.js, React and Typescript project. This is a great starting point for a new project, if you don't feel like using Laravel Breeze."
+---
+
+> Laravel: Inertia.js, React and Typescript setup
+
+In order to make Laravel work with Inertia, React and Typescript, you need to install a few packages. This is a great starting point for a new project, if you don't feel like using Laravel Breeze.
+
+The reason why you may not want to use Laravel Breeze is because it comes with a lot of extra stuff that you may not need.
+
+So if you are interested in a more minimal setup, then this is the way to go. Typescript is of course optional, but it's a great way to make your code more robust. Otherwise, you can just leave the typescript part out.
+
+## Install the npm packages
+```bash
+npm install @vitejs/plugin-react @types/node @types/react @types/react-dom @inertiajs/react react react-dom typescript --save-dev
+```
+## Install the composer packages
+```bash
+composer require inertiajs/inertia-laravel tightenco/ziggy
+```
+## Entry point for Inertia and Vite
+Below is the entry point for Inertia and Vite. This is the file that will be used to render the Inertia pages. The file name is `app.blade.php` and it should be placed in the `resources/views` directory.
+
+The Laravel Inertia adapter will look the root template named `app.blade.php` by default and use it to render the Inertia pages. If you would like to use a different root view, you can change that using the `Inertia::setRootView` method.
+```php
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title inertia>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @routes
+    @viteReactRefresh
+    @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
+    @inertiaHead
+</head>
+
+<body class="font-sans antialiased">
+    @inertia
+</body>
+
+</html>
+```
+
+## Setup Inertia Middleware
+Inertia middleware is used to share data with the client. You can generate a new middleware using the following command:
+```bash
+php artisan inertia:middleware
+```
+This will create a new middleware in the `App\Http\Middleware` directory. In order to use the middleware (`HandleInertiaRequests`), you need to add it to the `web` middleware group in the `app/Http/Kernel.php` file.
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+        // ...
+        \App\Http\Middleware\HandleInertiaRequests::class,
+    ],
+    // ...
+];
+```
+
+## Setup Vite
+### Typscript config (optional)
+This is optional, but highly recommended. If you want to use typescript, you need to create a `tsconfig.json` file in the root of your project. Below is the configurations you need.
+
+```json
+{
+  "compilerOptions": {
+      "allowJs": true,
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "jsx": "react-jsx",
+      "strict": true,
+      "isolatedModules": true,
+      "target": "ESNext",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmit": true,
+      "paths": {
+          "@/*": ["./resources/js/*"],
+          "ziggy-js": ["./vendor/tightenco/ziggy"]
+      }
+  },
+  "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
+}
+```
+
+### Vite config
+Create a `vite.config.ts` file in the root of your project. Below is the configurations you need. This is the base setup for a Vite project.
+
+```typescript
+import { defineConfig } from "vite"
+import laravel from "laravel-vite-plugin"
+import react from "@vitejs/plugin-react"
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: "resources/js/app.tsx",
+            refresh: true,
+        }),
+        react(),
+    ],
+});
+```
+
+## Setup React
+### App component
+Create a new file called `app.tsx` in the `resources/js` directory. This is the entry point for the React application.
+
+```tsx
+import "./bootstrap";
+import "../css/app.css";
+
+import { createRoot } from "react-dom/client";
+import { createInertiaApp } from "@inertiajs/react";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+
+const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) =>
+        resolvePageComponent(
+            `./Pages/${name}.tsx`,
+            import.meta.glob("./Pages/**/*.tsx")
+        ),
+    setup({ el, App, props }) {
+        const root = createRoot(el);
+
+        root.render(<App {...props} />);
+    },
+    progress: {
+        color: "#4B5563",
+    },
+});
+```
+
+## Optional: Typescript setup
+If you are using typescript there are a few files you need to create.
+### `global.d.ts`
+This file is used to declare global types. Create a new file called `global.d.ts` in the `resources/js/types` directory.
+
+```typescript
+import { AxiosInstance } from "axios"
+import ziggyRoute from "ziggy-js"
+
+declare global {
+    interface Window {
+        axios: AxiosInstance;
+    }
+
+    var route: typeof ziggyRoute;
+}
+```
+### `index.d.ts`
+This file is used to declare project specific types. Create a new file called `index.d.ts` in the `resources/js/types` directory.
+
+```typescript
+export interface BaseRecord {
+    id?: number
+    created_at?: string
+    updated_at?: string
+}
+
+export interface User extends BaseRecord {
+    name: string
+    email: string
+    email_verified_at: string
+}
+
+export type PageProps<
+    T extends Record<string, unknown> = Record<string, unknown>
+> = T & {
+    auth: {
+        user: User
+    }
+}
+
+```
+
+### `vite-env.d.ts`
+This file is used to declare environment variables. Create a new file called `vite-env.d.ts` in the root of your project.
+
+```typescript
+/// <reference types="vite/client" />
+```
+
+## Optional: Tailwind CSS setup
+If you want to use Tailwind CSS, you need to install the package and create a configuration file. Below is the steps you need to follow.
+
+### Install the npm package
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+### Tailwind CSS config
+Tailwind will automatically create a `tailwind.config.js` file in the root of your project. Below is the configurations you need.
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
+    "./storage/framework/views/*.php",
+    "./resources/views/**/*.blade.php",
+    "./resources/js/**/*.tsx",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+### Tailwind Directives
+You need to add the Tailwind directives to the `resources/css/app.css` file. Below is the directives you need to add.
+
+```css
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+```
+
+That's it! You now have a base setup for a Laravel, Inertia.js, React and Typescript project. This is a great starting point for a new project, if you don't feel like using Laravel Breeze.
+

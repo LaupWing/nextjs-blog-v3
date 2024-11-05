@@ -1,0 +1,73 @@
+---
+title: "The Only Array Functions You Will Ever Need"
+publishedAt: "2024-03-12"
+description: "After eight years of programming and learning all the array methods that exist within the JavaScript ecosystem, modifying or manipulating data or searching is one of the most common tasks in programming."
+englishOnly: "true"
+banner: "techblog/thumbnails/pen_and_list"
+tags: "typescript,nodejs"
+---
+
+
+After eight years of programming and learning all the array methods that exist within the JavaScript ecosystem, modifying or manipulating data or searching is one of the most common tasks in programming.
+
+It's also not surprising that it's important to know how to use these array functions. However, not all array functions are used equally often.
+
+I've come to the conclusion that I only frequently use the following array functions the most:
+
+And yes, they are in chronological order. You may be surprised by the place forEach is given...
+
+## 1: map
+This is without a doubt the most used array method in every project I have done so far. Most of the time, you want to keep the same amount of items in the array, but you want to modify each item in a particular way. Well, that's where the map function comes into play.
+
+```jsx
+const foobar = barfoo.map(bar => "foobar")
+```
+
+## 2: filter
+But the reverse is also often used. Instead of wanting the exact amount of items from an array, you want to return a filtered-down version of the array. Well, how conveniently this one is called filter. You can filter the items by returning the item after some kind of check. This way, you only end up with a set of items that match the required check.
+
+```jsx	
+const foobar = barfoo.filter(bar => {
+    if (bar.name === "foo")
+        return bar
+})
+```
+You can also write it in a ternary statement like this:
+
+```jsx
+const foobar = barfoo.filter(bar => bar.name === "foo" ? true : false )
+```
+Because a condition always returns a boolean, you can also leave out the whole ternary statement.
+
+```jsx
+const foobar = barfoo.filter(bar => bar.name === "foo")
+```
+## 3: find
+Also, a usual use case is that you want to check if a specific item is available inside an array. If the array consists simply of strings or numbers, you could opt for the includes method. But if the array consists of objects, it is far better to use the find method.
+
+The same rules as for the filter method apply to the find method. But instead of returning the whole list, the find method only returns the first item that meets the requirement.
+
+```jsx
+const foobar = barfoo.find(bar => {
+    if (bar.name === "foo")
+        return bar
+})
+```
+
+And also here you can write it as a ternary or just simply return the statement.
+
+## 4: forEach
+And last but certainly not least is the forEach method. Back in the day, I used to use this forEach method for almost every scenario, but that was simply because I just didn’t understand the other array functions well enough.
+
+Now, I almost never use the forEach method. The only scenario this method comes into play is whenever I don’t want to modify the array in any way but want to do something outside of it. Because this use case sparingly exists, I ended up almost never using the forEach method.
+
+```jsx
+const foobar = barfoo.find(bar => {
+    // Do something with each item
+    foo.push(bar)
+})
+```
+
+There are also other array function methods that exist which I also will use but sparingly. These are the sort, some, and the reduce array methods. But in all honesty, even the sort method I don’t use that often.
+
+I am not saying that you should not learn those methods. You should know what they do in case you need to use them. But I can almost guarantee you that there aren’t many times that you are forced to use them. Well, maybe the sort is used a bit more than the forEach, but it will surprise you how often you actually going to use it in contrast to the other ones.

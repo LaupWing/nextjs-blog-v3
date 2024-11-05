@@ -1,0 +1,37 @@
+---
+title: "Laravel, PHP: Send SMS with twilio"
+tags: "php"
+publishedAt: "2024-02-15"
+description: "Setting up Absolute Imports with jsconfig"
+---
+
+> Send SMS with twilio
+
+## Get your twilio credential and put them in your `.env` file
+
+`TWILIO_SID=YOUR_SID_HERE`
+
+`TWILIO_AUTH_TOKEN=YOUR_AUTH_TOKEN_HERE`
+
+## Install the package of twilio for your stack. Im using php here but if you use node install the node one
+
+```bash
+composer require twilio/sdk
+```
+
+## Done! Now use the code below to send your first message!
+
+```php
+$account_sid = getenv("TWILIO_SID");
+$auth_token = getenv("TWILIO_AUTH_TOKEN");
+$client = new Client($account_sid, $auth_token);
+
+$message_id = $client->messages->create(
+   "+3161234567",
+   [
+      "from" => "+3161234567",
+      "body" => "Hello World"
+   ]
+);
+logger($message_id);
+```

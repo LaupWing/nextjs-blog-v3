@@ -1,0 +1,55 @@
+---
+title: "CSS: Some CSS Selectors You Should Know"
+tags: "css,react"
+publishedAt: "2024-02-24"
+description: "Here are some CSS selectors you should know about, but might not be using."
+---
+> CSS: Some CSS Selectors You Should Know
+
+I have been using CSS for a while now, and I have come across some CSS selectors that I myself haven't heard and seen before despite using CSS for more than 7 years now. Here are some of them:
+
+## Empty Selectors
+The `:empty` selector is used to select elements that contain no children. For example, the following CSS will hide any empty `div` elements:
+```html
+<div class="container">
+    <p>This paragraph is not empty.</p>
+    <span></span>
+    <div></div>
+</div>
+``` 
+```css
+.container div:empty {
+    display: none;
+}
+```
+
+## Target Selectors
+The `:target` selector matches the current active hashtag in the URL. For example, the following CSS will change the background color of the element with the ID of `#about` when the URL contains `#about`:
+```html
+<div id="about">
+    <h2>About</h2>
+    <p>This is the about section.</p>
+</div>
+```
+```css
+#about:target {
+    background-color: yellow;
+}
+```
+
+## Lang Selectors
+The `:lang` selector is used to select elements with a specific language. For example, the following CSS will change the color of any element with the `lang` attribute set to `fr`:
+```html
+<p lang="fr">Bonjour!</p>
+<p lang="en">Hello!</p>
+```
+
+```css
+p:lang(fr) {
+    color: blue;
+}
+
+p:lang(en) {
+    color: green;
+}
+```

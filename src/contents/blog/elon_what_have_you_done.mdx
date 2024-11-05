@@ -1,0 +1,167 @@
+---
+title: "Elon complicated the the hell out of the twitter api"
+publishedAt: "2024-03-21"
+description: "Elon what are you doing? You are making the twitter api more complicated than it already is."
+englishOnly: "true"
+banner: "techblog/thumbnails/elon_what_are_you_doing"
+tags: "typescript,javascript"
+---
+I don’t know what Elon has done with Twitter, but the Twitter API was one hell of a pain to make work. What actually should be an easy operation has become somewhat convoluted to integrate. The only action I wanted to perform was to post a tweet with an image attached to it.
+
+That’s it.
+
+I needed an API key, okay, that was easy. But somehow the Twitter API still gave me this error:
+
+In this article, I will not go into actually using the Twitter API, but simply prepping your Twitter project to work with the API properly so that you can tweet your memes programmatically.
+
+First, you need to navigate to the Twitter Developer Portal and log in with your Twitter account.
+
+https://developer.twitter.com/en/portal/dashboard
+
+After logging in, you will be greeted with the Twitter dashboard.
+
+It is quite clear what button you should press in order to create your Twitter project to retrieve the API keys. If you don’t know it, don’t stress, I got you. Just simply click on the create project button.
+
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/1"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+
+In the following pages, just fill in your information and continually click next and fill in the required information.<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/2"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+On the last page, you will see the keys you need to copy and save somewhere on your local machine. These keys are needed in order to send tweets, or so you think.
+
+After you have noted the keys somewhere, you can just return to the dashboard by clicking on "back to the dashboard" button.
+
+This seems like all we need to send a tweet with our code. Unfortunately, this is not the case. We need the access token and secret token besides our API keys in order to send tweets with our account.
+
+Navigate to your project you have created and click on the little key icon within your app on the bottom inside the app section.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/3"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+Here you need to press the generate button for the Access Token and Secret in order to generate our last missing pieces we need. You also need to note these keys somewhere because you will also need them.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/4"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+So let’s plug those API keys into our environment variable and test it out.
+
+I will not go into any details about the code. In the next blog article, I will explain the code for sending a tweet with an image attached to it.
+
+Below you will see the environment variables I have used (These variables are stored within the **`.env`** file):
+
+```jsx
+TWITTER_API_SECRET="gY9bHUSPW4SkiRTqOL9WgYjFX063qpLNWh18gAqpbLRH4NALWB"
+TWITTER_API_KEY="UvgFAxl8QYsshSqTkWvFxZXMw"
+TWITTER_SECRET_TOKEN="yiAW11w3pPhUmmTGBca92Z6cL7wvHKq52lEbqHQ5TxkeB"
+TWITTER_ACCESS_TOKEN="1648606690525282304-EdCXJK2maIK6IGCmoDJg1kty7fok9L"
+```
+
+Below you see a simple code on how to send a tweet using your account. Twitter knows that it is your account because the API keys are connected to your account.
+
+```jsx
+import { TwitterApi } from "twitter-api-v2"
+const client = new TwitterApi({
+        // @ts-expect-error
+        appKey: process.env.TWITTER_API_KEY! as string,
+        appSecret: process.env.TWITTER_API_SECRET,
+        accessToken: process.env.TWITTER_ACCESS_TOKEN,
+        accessSecret: process.env.TWITTER_SECRET_TOKEN,
+})
+
+rw_client.v2.tweet({
+	text: "Hello World"
+})
+```
+
+Let’s run the script and see what happens!
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/5"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+Somehow the API returns a status response of 403. If you look up what the status response of 403 means on the Twitter API documentation website, you will see that it says:
+
+```bash
+Check that your developer account includes access to the endpoint you’re trying to use. You may also need to get your App allowlisted (e.g. Engagement API or Ads API) or sign up for access.
+
+```
+
+If you go back to the Twitter API dashboard and navigate to the section where you have generated the access and the secret token, you will see that you have created the authentication keys with read-only permissions. Meaning you cannot write posts with the current access and secret token you have generated.
+
+This is where I have spent hours researching to discover where I can change this permission to read and write. I think it is a little bit user-unfriendly to not include this when generating the access and secret token in the first place.
+
+So let’s change the permissions so that we can post tweets with our account. Unfortunately, this process is not just simply checking a checkbox and pressing save. Twitter made this a little verbose and hard to discover, but I got you!
+
+Navigate to your project page. Under the page, where you also have generated the access and secret token, you can change its settings by clicking on the cog icon. By clicking on the cog, you will be navigated to the app settings page.
+
+On this page, you need to scroll all the way down under the user authentication settings. There will be a big button that says set up.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/6"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+I was personally looking for the permissions setting for ages, but on this page, you can change it. Click the checkbox with the permissions you want to use for your application. So in our case, we want to just read and write. So we will need to select that option.
+
+If you scroll down to save, you will probably notice that the save button is grayed out. Signifying that you currently cannot save the settings. In order to save, you will need to fill in all the required fields. These are the type of app you are building and the callback URL and website URL.
+
+If you don’t have either of the callback URL or website URL, just put https://twitter.com/ in those fields. For writing a tweet, these fields are not really that important nor will they be used.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/7"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+Now you will be able to save the settings. A popup will appear giving you a warning that changing the permissions might affect your app. Don’t worry about this and press yes to confirm the changes.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/8"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+You will be redirected to a screen which shows you the client ID and client secret keys. For sending a tweet programmatically, this is not really needed. These keys are only really used if you are building a web app that requires users to log in with their Twitter account. So in our case, we don’t need to save the client ID and client secret. Of course, you can save it somewhere if you would like to. But in our case, it is not really needed.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/9"
+    alt="templates"
+    width={1400}
+    height={700}
+/>
+What we do need to do is to regenerate our tokens because we have changed our permissions from read to read and write.
+
+Go to your the keys and tokens tab and scroll down to the access token and secret token. Press on regenerate. Replace the **`TWITTER_SECRET_TOKEN`** and **`TWITTER_ACCESS_TOKEN`** with the newly generated ones.
+
+After all of this, you can now finally send a tweet using Node.js (or any other programming language). So let’s test it out and see if it actually works.
+<CloudinaryImage
+    mdx
+    public_id="techblog/twitter_api/10"
+    alt="templates"
+    width={731}
+    height={261}
+/>
+As you can see, the tweet has been successfully sent (Don’t pay attention to the actual payload).
+
+Hopefully, you have had some value out of this tutorial and it spares you the headache of working with this API.
+
+Happy coding!

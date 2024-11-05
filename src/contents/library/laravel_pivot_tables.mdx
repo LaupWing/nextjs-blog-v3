@@ -1,0 +1,34 @@
+---
+title: "Laravel: Pivot Tables"
+tags: "laravel,php"
+publishedAt: "2024-02-08"
+description: "Improve React development efficiency using ComponentPropsWithoutRef."
+---
+
+> Laravel: Pivot Tables
+
+If you have many to many relationships in Laravel, you'll need to create a pivot table. This table will contain the foreign keys of the two tables you're connecting.
+
+Below you can see an example of a pivot table for a many to many relationship between the `emails` and `templates` tables.
+
+```php
+Schema::create("email_templates", function (Blueprint $table) {
+    $table->id();
+    $table->foreignId("email_id")->constrained();
+    $table->foreignId("template_id")->constrained();
+    $table->timestamps();
+});
+```
+
+In this example, the `email_id` and `template_id` columns are foreign keys that reference the `id` column of the `emails` and `templates` tables, respectively.
+
+When you're working with pivot tables in Laravel, you can access the pivot data using the `pivot` attribute on the relationship.
+
+```php
+$email = Email::find(1);
+$template = Template::find(1);
+
+$email->templates()->attach($template, ["is_default" => true]);
+
+$defaultTemplate = $email->templates->firstWhere("pivot.is_default", true);
+```

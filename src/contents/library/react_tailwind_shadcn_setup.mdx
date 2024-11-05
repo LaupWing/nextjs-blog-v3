@@ -1,0 +1,129 @@
+---
+title: "React:  How to add Shadcn to a Nextjs project"
+tags: "typescript,javascript,react,tailwindcss,nextjs"
+publishedAt: "2024-04-19"
+description: "Learn how to add Shadcn to a Nextjs project and configure it to work with your Nextjs project."
+---
+> React: How to add shadcn to a NextJS project
+
+The exact steps described here can also be found in the official Shadcn documentation.
+
+Shadcn link: [Shadcn link](https://ui.shadcn.com/docs/installation/next)
+
+## Create Nextjs TypeScript Project with your terminal
+
+### Initialize
+
+Open up your terminal.
+
+Run the following script, the following script will create a boilerplate Nextjs TypeScript project:
+
+```bash
+npx create-next-app@latest my-app --typescript --tailwind
+
+```
+
+Of course, you can name your project whatever you like.
+
+To do this, you will have to replace `my-app` with the name you want to give your project.
+
+### Change Directory
+
+Now that we have the boilerplate setup, we can change the directory into that project:
+
+```bash
+cd my-app
+```
+
+## Installing Shadcn
+
+Next, we'll install Shadcn.
+
+### **Install Shadcn**
+
+The following command will open up a dialog box that will guide you through the installation process:
+
+```bash
+npx shadcn-ui@latest init
+```
+
+You will be asked a series of questions:
+* Which style would you like to use?
+  * This doesn't matter, you can choose any style you like. You can change this later if you would like to.
+* Which color would you like to use as base color?
+  * Also this doesn't matter, you can choose any color you like. You can change this later if you would like to.
+* Do you want to use CSS variables for colors?
+  * Just type `yes` or `no` depending on your preference. But I would recommend you to use CSS variables for colors. It is easier to manage.
+
+```bash
+Which style would you like to use? › Default
+Which color would you like to use as base color? › Slate
+Do you want to use CSS variables for colors? › no / yes
+```
+
+### **Custom fonts (Optional)**
+
+This is optional, but if you would like to use custom fonts, here are the two steps you need to follow:
+
+#### **Step 1: Add the font to your root**
+Go to the root layout of your project and add the following line of code:
+
+
+```jsx
+import "@/styles/globals.css"
+import { Inter as FontSans } from "next/font/google"
+
+import { cn } from "@/lib/utils"
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        ...
+      </body>
+    </html>
+  )
+}
+```
+
+#### **Step 2: Add the font to your tailwind config**
+Now you need to add the font to your tailwind config file. Open up your `tailwind.config.js` file and add the following line of code:
+
+```js
+const { fontFamily } = require("tailwindcss/defaultTheme")
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+      },
+    },
+  },
+}
+```   
+
+### **That’s it!**
+
+Thats it! You have successfully added Shadcn to your Nextjs project.
+
+You probably have noticed that there a couple of directories added to your project. These directories are added by Shadcn and are used to manage the components of your project.
+
+* `components/ui`: Here you will find all the components that are used or added to your project.
+* `lib/utils.ts`: This file contains a utility function that is used to combine classnames.
+
+If you would like to add a new component to your project, you can go to this url: [Shadcn UI](https://ui.shadcn.com/docs/components/accordion) and copy the code of the component you would like to add to your project.

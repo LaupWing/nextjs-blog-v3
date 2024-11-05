@@ -1,0 +1,57 @@
+---
+title: "CSS: Never use margins again for spacing"
+tags: "css,react"
+publishedAt: "2024-02-24"
+description: "The best replacement for margins in CSS. If you are using margins for spacing, you are doing it wrong."
+---
+> CSS: Never use margins again for spacing
+
+Are you using margins or paddings to create some space between your elements?
+
+Stop using margins and paddings forever and replace them with the **`gap`** CSS property.
+
+It is an easy way to define the space between the elements you want.
+
+NOTE: I'm using Tailwind in the code examples.
+
+You can use the gap with the **`grid`** display but also with the **`flex`** display.
+
+```html
+<div class="grid gap-4 grid-cols-2">
+    <div>01</div>
+    <div>02</div>
+    <div>03</div>
+    <div>04</div>
+</div>
+```
+
+```html
+<div class="flex gap-4">
+    <div>01</div>
+    <div>02</div>
+    <div>03</div>
+    <div>04</div>
+</div>
+```
+
+Only want to create a gap on the x or y axis?
+
+No problem, you can also do that with the Tailwind **`gap-x`** and **`gap-y`** classes.
+
+```html
+<div class="grid gap-y-4 grid-cols-2">
+    <div>01</div>
+    <div>02</div>
+    <div>03</div>
+    <div>04</div>
+</div>
+```
+
+```html
+<div class="grid gap-x-4 grid-cols-2">
+    <div>01</div>
+    <div>02</div>
+    <div>03</div>
+    <div>04</div>
+</div>
+```

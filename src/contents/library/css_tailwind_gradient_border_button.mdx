@@ -1,0 +1,184 @@
+---
+title: "CSS: Awesome gradient border button with Tailwind"
+tags: "typescript,javascript,react,tailwindcss"
+publishedAt: "2024-04-06"
+description: "Learn how I build this awesome gradient border button with Tailwind CSS and React. This button has a moving gradient border effect that makes it pop like crazy!"
+---
+> CSS: Awesome gradient border button with Tailwind
+
+In this quick tutorial, we will discover how to create an awesome gradient button with React, complete with an animation that gives it a moving border effect.
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/button_gradient_border"
+    alt="templates"
+    width={1080}
+    height={1080}
+/>
+
+Looks awesome, right?
+
+Let’s dive in and see how we can achieve this.
+
+The prerequisite for this tutorial is having a React Vite project ready to go. If you don't have that yet, you could read this short article to set it up:
+
+Now that you have a fresh React project with Tailwind ready to go, let's get started.
+
+We'll begin with the component and work our way from there.
+
+## **React Component**
+
+Create a **`components`** directory inside your **`src`** directory and create a file called **`GradientButton.tsx`**.
+
+The button component will look like this:
+
+```jsx
+import { ComponentPropsWithoutRef, FC } from "react"
+import { cn } from "../lib/utils"
+
+const GradientButton: FC<ComponentPropsWithoutRef<"button">> = ({
+    className,
+    onClick,
+}) => {
+    return (
+        <div className="relative group flex">
+            <div className="absolute -inset-0.5 animate-pulse rounded blur from-custom-green bg-gradient-to-r to-custom-purple opacity-75 transition duration-1000 group-hover:opacity-100 group-hover:duration-200" />
+            <button
+                className={cn(
+                    "gradient-animation-border relative p-1 rounded-md overflow-hidden shadow hover:scale-[1.03] active:scale-[0.97] motion-safe:transform-gpu motion-reduce:hover:scale-100 transition duration-100 scale-100 ",
+                    className
+                )}
+                onClick={onClick}
+            >
+                <div className="font-bold rounded px-4 scale-100 dark:bg-dark text-gray-600 disabled:bg-gray-200 dark:text-gray-200 dark:disabled:bg-gray-700 bg-white py-[7px]">
+                    Gradient Button
+                </div>
+            </button>
+        </div>
+    )
+}
+
+export default GradientButton
+
+```
+
+We didn’t make a button as the root component here because we needed a wrapper for a gradient shadow effect, which is the **`div`** element above the **`button`** element. If you don’t want that, feel free to remove both the root **`div`** element and the gradient **`div`** element.
+
+At this stage, the button should look like this:
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/button_unstyled"
+    alt="templates"
+    width={700}
+    height={400}
+/>
+
+
+That's not quite what we intended, but we'll get there.
+
+You probably noticed some CSS classes that are not native to Tailwind, like **`custom-purple`**, **`bg-dark`**, **`bg-light`**, and last but certainly not least, the **`gradient-animation-border`** class.
+
+All of these classes are custom, and we will define those inside our **`index.css`** file and in our **`tailwind.css`** file.
+
+But let’s start with our **`index.css`** file.
+
+## **Custom Classes Inside Our `index.css`**
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --custom-red: 253 0 76
+    /* #fd004c */
+  ;
+  --custom-orange: 254 144 0
+    /* #fe9000 */
+  ;
+  --custom-green: 62 223 75
+    /* #3edf4b */
+  ;
+  --custom-blue: 51 99 255
+    /* #3363ff */
+  ;
+  --custom-purple: 177 2 183
+    /* #b102b7 */
+  ;
+  --custom-light: 255 255 255;
+  --custom-dark: 14 14 14;
+}
+
+.gradient-animation-border::before {
+  content: "";
+  height: 440%;
+  width: 180%;
+  left: -40%;
+  top: -160%;
+  position: absolute;
+  background: conic-gradient(rgb(var(--custom-red)),
+      rgb(var(--custom-orange)),
+      rgb(var(--custom-green)),
+      rgb(var(--custom-blue)),
+      rgb(var(--custom-purple)),
+      rgb(var(--custom-red)));
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+```
+
+We added our CSS variables inside our root selector in the form of RGB. There is a very good reason why we have done that. The reason is that, in order to work with CSS variables with Tailwind classes, it is required to be defined as RGB numbers.
+
+Below our CSS variables, we have our custom **`gradient-animation-border`** class that has a **`before`** pseudo-element. You see some weird **`width`**, **`height`**, **`left`**, **`top`** values here. These values are not set in stone.
+
+You should adjust these values to fit your button depending on the width and height of your button.
+
+The reason why the **`width`** and **`height`** are so big is that it has to be to create this moving gradient effect.
+
+If you look at the **`button`** element where the **`gradient-animation-border`** is applied, you will notice an **`overflow-hidden`** class. This way, we hide the fact that there is a **`before`** element that is twice the size of the button.
+
+And of course, we have added the animation CSS to create a spinning animation.
+
+Now let's add the final piece, and that is popping the CSS variables into our **`tailwind.config.js`** file.
+
+## **Attaching CSS Variables to `tailwind.config.js`**
+
+```jsx
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
+    theme: {
+        extend: {
+            colors: {
+                light: "rgb(var(--custom-light) / <alpha-value>)",
+                dark: "rgb(var(--custom-dark) / <alpha-value>)",
+                accent: "rgb(var(--custom-green) / <alpha-value>)",
+                "accent-light": "rgb(var(--custom-blue) / <alpha-value>)",
+                "custom-red": "rgb(var(--custom-red) / <alpha-value>)",
+                "custom-orange": "rgb(var(--custom-orange) / <alpha-value>)",
+                "custom-green": "rgb(var(--custom-green) / <alpha-value>)",
+                "custom-blue": "rgb(var(--custom-blue / <alpha-value>)",
+                "custom-purple": "rgb(var(--custom-purple) / <alpha-value>)",
+            },
+        },
+    },
+    plugins: [],
+}
+
+```
+
+If you look at the official Tailwind docs: https://tailwindcss.com/docs/customizing-colors#using-css-variables
+
+You will see that the exact example has been used in that article. So we just followed the Tailwind recommended way of doing this.
+
+Nothing special really in this file. We just have assigned the Tailwind custom classes to the CSS variables' RGB values with an alpha value so it will be RGBA to add opacity to the background colors.
+
+Now Tailwind will compile all the custom colors like **`bg-light`**, **`text-light`**, etc., you get the gist.
+
+That’s it!
+
+We have an awesome gradient-colored button that makes our buttons on our website pop like crazy!

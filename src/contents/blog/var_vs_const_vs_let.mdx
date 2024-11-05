@@ -1,0 +1,42 @@
+---
+title: "`var` vs `const` vs `let`"
+publishedAt: "2024-03-15"
+description: "Let’s finish this ancient old debate once and for all should you use var, const or let if you are creating an variable within javascript."
+englishOnly: "true"
+banner: "techblog/thumbnails/3_v"
+tags: "typescript,javascript"
+---
+Let’s finish this ancient old debate once and for all should you use var, const or let if you are creating an variable within javascript. 
+
+If you don’t want to read the whole article (it isn’t that long) here is your answer: just use const and if the value changes somewhere further in the code change it to let. 
+
+For those who want a bit more information why that is my answer let’s discuss these 3 syntaxes.
+
+## `var` :
+
+Before es5 the const and let syntaxes were not available. I have used the var syntaxes for a few years until then and this syntax has for sure very obvious quirks with it. Here are the ones that I have discovered:
+
+- It’s get hoised. Meaning that if the javascript engine reads the code it wil l put the variable on top. So the variable is available before it even gets defined. But the value inside is undefined. I know weird stuff.
+- Function scoped. Meaning that the variable will not be scoped with every other block scope like if scope, for, and loop scope. Instead it they will get scoped to the nearest function block
+
+These two quirks of the var makes the code behave in a very weird matter. 
+
+## `const` and `let`
+
+const and var have very similar except for one important thing. Both const and var are being hosted to the top of the scope. But unlike the var it is not initialized. Both const and let are block scoped. Meaning they are only available in the scope you have defined them. So both const ant let are only availbe in the if block if you defined them in the if block.
+
+But what makes them different is that one is immutable and one is mutable. 
+
+The const variable is immutuable. Meaning you cannot change its value. You can change the value of an object, but that is beyond the scope of this article. But for the rest you cannot change the value of an const variable in any shape or form.
+
+The let variable on the other hand is mutable. So if you assigned an string to it is is completely okay to change it later on to an number if you wish so.
+
+## Why use `const` instead of the `let`
+
+In my 8 years of programming. Creating hunders of web application. I can assure you that the moment you allow a variable to change it’s value, you will allow a lot of unnessary errors within your code.
+
+It makes your code very hard to read when a varaible is at one point an object and in another point an array with strings. It just don’t make sense.
+
+There are some cases when you are forced to use an let varaible but often times these cases are used for some kind of toggle, besides that it is very rare that you acutally need to change an varaible.
+
+So my advice to you is to always use the const keyword. And the moment you really need to ability to change the value of the variable. Think again, because maybe you have written your code a bit messy. Otherwise if you really have to change it to an let.

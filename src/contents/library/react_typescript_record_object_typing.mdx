@@ -1,0 +1,41 @@
+---
+title: "React, Typescript: Record Type for Objects"
+tags: "typescript,react"
+publishedAt: "2023-12-01"
+description: "Use the Record typescript type to define an object with a dynamic key and value."
+---
+
+> React, Typescript: Record Type for Objects
+
+The Record type in TypeScript is used to define an object with dynamic keys and corresponding values.
+
+In the example below, we have a type called SomeObject, which is a Record type with string keys and number values.
+
+```ts
+type SomeObject = Record<string, number>
+```
+
+The example above is a simple illustration of how to use the Record type, but it can be applied in various ways.
+
+One of my favorite uses of the Record type is for defining different styles for a component.
+
+## Code
+
+```jsx
+type ButtonVariants = "primary" | "secondary" | "tertiary"
+
+const Button = ({ variant }: { variant: ButtonVariants }) => {
+    const buttonStyles: Record<ButtonVariants, string> = {
+        primary: "bg-blue-500 text-white",
+        secondary: "bg-gray-500 text-white",
+        tertiary: "bg-green-500 text-white",
+    }
+    return (
+        <button className={`px-4 py-2 ${buttonStyles[variant]}`}>
+            Click Me
+        </button>
+    )
+}
+```
+
+This way, you can define different styles for the various button variants and use the variant prop to apply the correct styles.

@@ -1,0 +1,151 @@
+---
+title: "CSS: Tailwind grid + aspect = Fire"
+tags: "typescript,javascript,react,tailwindcss"
+publishedAt: "2024-04-01"
+description: "Tailwind grid is a game-changer for creating amazing and responsive web layouts."
+---
+> CSS: Tailwind grid + aspect = Fire
+
+Tailwind grid is a game-changer for creating amazing and responsive web layouts. When combined with the CSS aspect property, you can easily maintain the size and dictate the maximum number of elements per column (if you've defined columns instead of rows, which is the most common use case).
+
+Let's see how this works by creating a very basic example.
+
+I will assume that you already have everything set up for Tailwind to work correctly.
+
+## Container with display grid
+
+This is very easy, just add the `grid` class to the container you want to use a grid on. We will also add the number of columns we want by using the `grid-cols-[x]` class name. Of course, replace the x with the number of columns you want to define.
+
+```html
+<div className="grid grid-cols-3 p-10 bg-slate-600">
+	<div className="h-10"></div>
+	<div className="h-10"></div>
+	<div className="h-10"></div>
+</div>
+
+```
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/css_tailwind_aspect_plus_grid/1"
+    alt="templates"
+    width={1400}
+    height={200}
+/>
+
+And that's it! You now have created a very basic container with a display of grid that has 3 columns. So every item will be a maximum of one third of the container.
+
+For the time being, I have added a fixed height class for each child element.
+
+Oops, I forgot something very important. The spacing between each child element. We can do this very easily by using the `gap-[x]` Tailwind class.
+
+```html
+<div className="grid grid-cols-3 p-10 bg-slate-600 gap-10">
+    <div className="h-36 bg-red-300"></div>
+    <div className="h-36 bg-red-300"></div>
+    <div className="h-36 bg-red-300"></div>
+</div>
+
+```
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/css_tailwind_aspect_plus_grid/2"
+    alt="templates"
+    width={1400}
+    height={200}
+/>
+
+## Adding responsiveness
+
+The great thing about using the grid containers is that you can very easily make it responsive by just changing the number of columns shown on a page.
+
+Because Tailwind is a mobile-first CSS framework, we will need to specify the number of columns on a mobile version first. And that is often times 1.
+
+We'll keep it simple and make it 3 columns if it is at a `md` size screen which is a minimum of 768 pixels.
+
+```html
+<div className="grid grid-cols-1 md:grid-cols-3 p-10 bg-slate-600 gap-10">
+    <div className="h-36 bg-red-300"></div>
+    <div className="h-36 bg-red-300"></div>
+    <div className="h-36 bg-red-300"></div>
+</div>
+```
+
+## Aspect-ratio
+
+The aspect ratio is a relatively new feature in Tailwind. It is a fantastic way to keep the aspect ratio of an element the same across all sizes.
+
+In the old days, if we wanted to make an element a square at all times, we needed to do something ridiculous like creating a height of zero and padding-bottom of 100%.
+
+But now we can just simply use aspect ratio.
+
+Tailwind has this now built in by using the `aspect-[ratio]` classname.
+
+You can use the available ones:
+
+- `aspect-square` : sets aspect-ratio to 1/1
+- `aspect-video` : sets aspect-ratio to 16/9
+- `aspect-auto` : sets aspect-ratio to auto
+
+For an in-depth explanation of aspect-ratio, check the documentation on Mozilla: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+
+Now let's replace the fixed height for a more dynamic approach with the `aspect-ratio` class of tailwind.
+
+```html
+<div className="grid grid-cols-1 md:grid-cols-3 p-10 bg-slate-600 gap-10">
+    <div className="aspect-square bg-red-300"></div>
+    <div className="aspect-square bg-red-300"></div>
+    <div className="aspect-square bg-red-300"></div>
+</div>
+```
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/css_tailwind_aspect_plus_grid/3"
+    alt="templates"
+    width={1400}
+    height={300}
+/>
+
+Awesome, right!
+
+At this moment, it's kind of a boring example. It’s just a container with 3 squares! Let’s spice it up with some images using the also very new tailwind feature called arbitrary values:
+
+```html
+<div className="grid grid-cols-1 md:grid-cols-3 p-10 bg-slate-600 gap-10">
+    <div className="aspect-square bg-[url(<https://source.unsplash.com/random/500x500>)]"></div>
+    <div className="aspect-square bg-[url(<https://source.unsplash.com/random/600x500>)]"></div>
+    <div className="aspect-square bg-[url(<https://source.unsplash.com/random/700x500>)]"></div>
+</div>
+```
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/css_tailwind_aspect_plus_grid/4"
+    alt="templates"
+    width={1400}
+    height={300}
+/>
+Now you can create card layouts that are always square no matter what width the child element is.
+
+What if you want a custom aspect ratio?
+
+Good question. While we are already on the topic of arbitrary values. We can also use arbitrary values on the `aspect` tailwind classes.
+
+```html
+<div className="grid grid-cols-1 md:grid-cols-3 p-10 bg-slate-600 gap-10">
+    <div className="aspect-[4/6] bg-[url(<https://source.unsplash.com/random/500x500>)]"></div>
+    <div className="aspect-[4/6] bg-[url(<https://source.unsplash.com/random/600x500>)]"></div>
+    <div className="aspect-[4/6] bg-[url(<https://source.unsplash.com/random/700x500>)]"></div>
+</div>
+```
+<CloudinaryImage
+    mdx
+    public_id="techblog/code_snippets/css_tailwind_aspect_plus_grid/5"
+    alt="templates"
+    width={1400}
+    height={500}
+/>
+
+The 4 represents the width and the 6 represents the height.
+
+That’s it for this tutorial. Thanks for taking the time to read this article!
+
+Happy coding!

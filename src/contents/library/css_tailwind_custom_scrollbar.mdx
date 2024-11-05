@@ -1,0 +1,96 @@
+---
+title: "CSS: How to add custom scrollbar with tailwindcss"
+tags: "css,react"
+publishedAt: "2024-03-24"
+description: "A short tutorial on how to add a custom scrollbar to your website using tailwindcss."
+---
+> CSS: How to add custom scrollbar with tailwindcss
+
+Did you know that you can create a custom scrollbar with tailwindcss?
+
+Here's how you can do it:
+
+## Install the npm package
+
+```bash
+npm i tailwind-scrollbar
+```
+
+## Add the plugin to your tailwind.config.js file
+
+```js
+module.exports = {
+    // ...
+    plugins: [
+        // ...
+        require('tailwind-scrollbar'),
+    ],
+};
+```
+
+
+## Now you can use it in your Html files or React component!
+
+```html
+<div class="scrollbar scrollbar-thumb-sky-700 scrollbar-track-sky-300 h-32 overflow-y-scroll">
+    <div class="h-64 bg-slate-400"></div>
+</div>
+```
+
+## List of utility classes
+The scroll bar has two main parts: the thumb and the track. The thumb is the draggable part of the scrollbar, and the track is the part that the thumb moves along. The corner is the intersection of the vertical and horizontal scrollbars.
+### Base utilities:
+```html
+<!-- Example of base utility for enabling custom scrollbar styling -->
+<div class="scrollbar">
+    <!-- Content with custom scrollbar styling -->
+</div>
+```
+### Colour utilities:
+```html
+<!-- Example of setting color for scrollbar thumb -->
+<div class="scrollbar-thumb-blue-500">
+    <!-- Content with scrollbar thumb in blue color -->
+</div>
+
+<!-- Example of setting color for scrollbar track -->
+<div class="scrollbar-track-gray-300">
+    <!-- Content with scrollbar track in gray color -->
+</div>
+
+<!-- Example of setting color for scrollbar corner -->
+<div class="scrollbar-corner-red-700">
+    <!-- Content with scrollbar corner in red color -->
+</div>
+```
+
+### Size utilities:
+```html
+<!-- Example of setting width for vertical scrollbar -->
+<div class="scrollbar-w-4">
+    <!-- Content with vertical scrollbar of width 4 -->
+</div>
+
+<!-- Example of setting height for horizontal scrollbar -->
+<div class="scrollbar-h-6">
+    <!-- Content with horizontal scrollbar of height 6 -->
+</div>
+```
+
+### Radius utilities:
+```html
+<!-- Example of rounding scrollbar thumb's corners -->
+<div class="scrollbar-thumb-rounded-full">
+    <!-- Content with scrollbar thumb with rounded corners -->
+</div>
+
+<!-- Example of rounding scrollbar track's corners -->
+<div class="scrollbar-track-rounded-md">
+    <!-- Content with scrollbar track with rounded corners -->
+</div>
+
+<!-- Example of rounding scrollbar corner's corners -->
+<div class="scrollbar-corner-rounded-lg">
+    <!-- Content with scrollbar corner with rounded corners -->
+</div>
+```

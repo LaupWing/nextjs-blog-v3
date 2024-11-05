@@ -1,0 +1,51 @@
+---
+title: "CSS: The only tailwind flex classes you need"
+tags: "css,react"
+publishedAt: "2024-03-09"
+description: "These are the only tailwind flex classes you need to know to create visually appealing layouts."
+---
+> The only tailwind flex classes you need
+
+
+Flexbox and Tailwind CSS have become essential tools in frontend development, embraced by both seasoned professionals and newcomers for their efficiency and flexibility. Over years of practice and experience, I've refined my skills in using these technologies to create visually appealing layouts. Here's a breakdown of some commonly used Tailwind CSS classes that I frequently rely on:
+
+## 1: flex
+The flex class is my go-to for creating flexible containers that allow for dynamic arrangement of elements.
+
+```html	
+<div class="flex">
+</div>
+```
+## 2: flex-col
+When I need to stack elements vertically, I use the flex-col class to easily achieve this layout.
+
+```html	
+<div class="flex flex-col">
+	<div></div>
+	<div></div>
+	<div></div>
+</div>
+```
+
+## 3: flex-1
+To ensure elements adapt smoothly to available space within a container, I apply the flex-1 class, which distributes remaining space evenly.
+
+```html	
+<div class="flex">
+	<div class="flex-1"></div> <!-- This element will fill remaining space -->
+	<div></div>
+	<div></div>
+</div>
+```
+
+## 4: flex-shrink-0
+In cases where I want to prevent elements from shrinking beyond a certain point, I use the flex-shrink-0 class to maintain consistent layout.
+
+```html
+<div class="flex">
+	<div class="flex-shrink-0"></div>
+	<div></div>
+	<div></div>
+</div>
+```
+By leveraging these Tailwind CSS classes, I've been able to streamline my development process and create user-friendly interfaces with ease.
