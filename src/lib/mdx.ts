@@ -12,20 +12,11 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypePrism from "rehype-prism-plus"
 import rehypeSlug from "rehype-slug"
 import remarkGfm from "remark-gfm"
-import { checkIfLangExists } from "./helper.server"
-import { Locale } from "@/i18.config"
 
-export async function getFileBySlug(
-    type: ContentType,
-    slug: string,
-    lang: Locale,
-) {
-    const language = (await checkIfLangExists(lang, type))
-        ? lang
-        : process.env.DEFAULT_LANG!
+export async function getFileBySlug(type: ContentType, slug: string) {
     const source = readFileSync(
-        join(process.cwd(), "src", "contents", type, language, `${slug}.mdx`),
-        "utf8",
+        join(process.cwd(), "src", "contents", type, `${slug}.mdx`),
+        "utf8"
     )
 
     const { code, frontmatter } = await bundleMDX({
@@ -63,22 +54,13 @@ export async function getFileBySlug(
     }
 }
 
-export async function getAllFilesFrontmatter<T extends ContentType>(
-    type: T,
-    lang: Locale,
-) {
-    const language = (await checkIfLangExists(lang, type))
-        ? lang
-        : process.env.DEFAULT_LANG!
-
-    const files = readdirSync(
-        join(process.cwd(), "src", "contents", type, language),
-    )
+export async function getAllFilesFrontmatter<T extends ContentType>(type: T) {
+    const files = readdirSync(join(process.cwd(), "src", "contents", type))
 
     return files.reduce((allPosts: Array<PickFrontmatter<T>>, postSlug) => {
         const source = readFileSync(
-            join(process.cwd(), "src", "contents", type, language, postSlug),
-            "utf8",
+            join(process.cwd(), "src", "contents", type, postSlug),
+            "utf8"
         )
         const { data } = matter(source)
 
@@ -96,7 +78,7 @@ export async function getAllFilesFrontmatter<T extends ContentType>(
 
 export function getRecent<T extends Frontmatter>(
     contents: Array<T>,
-    limit = 4,
+    limit = 4
 ) {
     const sorted_contents = contents.sort((a, b) => {
         return (
