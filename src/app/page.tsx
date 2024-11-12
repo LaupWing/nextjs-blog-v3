@@ -14,7 +14,7 @@ import { ContactMe } from "@/components/sections/ContactMe"
 import { LoadedContainer } from "@/components/containers/LoadedContainer.client"
 import { FC } from "react"
 
-export const revalidate = 60 * 60 // 1 hour
+export let revalidate = 60 * 60 // 1 hour
 
 export default async function Home() {
     return (

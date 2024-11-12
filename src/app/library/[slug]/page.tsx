@@ -15,7 +15,7 @@ import seo from "@/lib/seo"
 
 export const dynamicParams = false
 
-export const revalidate = 0
+export let revalidate = 0
 
 export async function generateStaticParams() {
     const posts = await getFiles("library")
