@@ -48,9 +48,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 }
 
 interface PageProps {
-    params: {
-        slug: string
-    }
+    params: Promise<{ slug: string }>
 }
 
 const SingleLibraryPage = async (props: PageProps) => {
