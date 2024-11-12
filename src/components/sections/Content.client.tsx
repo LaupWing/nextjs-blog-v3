@@ -12,7 +12,7 @@ export const Content: FC<ContentProps> = ({ code }) => {
     const Component = useMemo(() => getMDXComponent(code), [code])
 
     return (
-        <article className="mdx lg:col-span-1 mt-4 projects prose mx-auto w-full transition-colors dark:prose-invert">
+        <article className="mdx xl:col-span-1 mt-4 projects prose mx-auto w-full !max-w-[80%] transition-colors dark:prose-invert">
             <Component
                 components={
                     {
