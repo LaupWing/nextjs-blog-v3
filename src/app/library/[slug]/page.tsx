@@ -63,7 +63,7 @@ const SingleLibraryPage = async (props: PageProps) => {
                     <div className="sticky top-24">
                         <TableContents slug={frontmatter.slug} />
                         <div className="flex items-center justify-center py-8">
-                            <Likes slug={frontmatter.slug} />
+                            {/* <Likes slug={frontmatter.slug} /> */}
                         </div>
                     </div>
                 </aside>
@@ -85,7 +85,7 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
                 {frontmatter.description}
             </p>
             <div className="mt-2 flex items-center justify-start gap-3 text-sm font-medium text-gray-600 dark:text-gray-300">
-                <Views slug={frontmatter.slug} />
+                {/* <Views slug={frontmatter.slug} /> */}
                 <span>•</span>
                 <TechIcons
                     techs={frontmatter.tags.split(",") as Array<TechListType>}
