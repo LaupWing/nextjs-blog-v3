@@ -33,7 +33,8 @@ const fetchPost = async (slug: string) => {
 }
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-    const post = await fetchPost(props.params.slug)
+    const { slug } = await props.params
+    const post = await fetchPost(slug)
     const { frontmatter } = post
 
     return {
@@ -52,7 +53,8 @@ interface PageProps {
 }
 
 const SingleLibraryPage = async (props: PageProps) => {
-    const post = await fetchPost(props.params.slug)
+    const { slug } = await props.params
+    const post = await fetchPost(slug)
     const { frontmatter, code } = post
     return (
         <main className="custom-container">
