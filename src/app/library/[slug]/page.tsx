@@ -10,6 +10,7 @@ import { Content } from "@/components/sections/Content.client"
 import { TableContents } from "@/components/sections/TableContents.client"
 import { Metadata } from "next"
 import seo from "@/lib/seo"
+import { prisma } from "@/lib/prisma"
 
 export const dynamicParams = false
 
@@ -85,12 +86,33 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
                 {frontmatter.description}
             </p>
             <div className="mt-2 flex items-center justify-start gap-3 text-sm font-medium text-gray-600 dark:text-gray-300">
+                <Test slug={frontmatter.slug} />
                 {/* <Views slug={frontmatter.slug} /> */}
                 <span>•</span>
                 <TechIcons
                     techs={frontmatter.tags.split(",") as Array<TechListType>}
                 />
             </div>
+        </div>
+    )
+}
+
+const Test: FC<{
+    slug: string
+}> = async ({ slug }) => {
+    const hi = await prisma.view.count({
+        where: {
+            ContentMeta: {
+                slug: slug,
+            },
+        },
+    })
+    console.log("test")
+    console.log(hi)
+
+    return (
+        <div>
+            <div>test</div>
         </div>
     )
 }
