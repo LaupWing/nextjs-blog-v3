@@ -10,15 +10,10 @@ interface ViewsProps {
 export const Views: FC<ViewsProps> = ({ slug }) => {
     const [views, setViews] = useState<false | number>(false)
     const fetchViews = async () => {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/views/${slug}`,
-            {
-                method: "POST",
-            }
-        )
-        const data = await res.json()
+        const res = await fetch("/api/views?slug=" + slug)
+        const json = await res.json()
 
-        setViews(data.views)
+        setViews(json)
     }
 
     useEffect(() => {

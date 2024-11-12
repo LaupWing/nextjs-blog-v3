@@ -92,7 +92,7 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
                 {/* <Suspense fallback={<div>...</div>}>
                     <Test slug={frontmatter.slug} />
                 </Suspense> */}
-                {/* <Views slug={frontmatter.slug} /> */}
+                <Views slug={frontmatter.slug} />
                 <span>•</span>
                 <TechIcons
                     techs={frontmatter.tags.split(",") as Array<TechListType>}

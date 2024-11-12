@@ -12,4 +12,5 @@ export async function GET(request: NextRequest) {
         },
     })
     await new Promise((resolve) => setTimeout(resolve, 10000))
+    return new Response(views.toString())
 }
