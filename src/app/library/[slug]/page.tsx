@@ -10,7 +10,6 @@ import { Content } from "@/components/sections/Content.client"
 import { TableContents } from "@/components/sections/TableContents.client"
 import { Metadata } from "next"
 import seo from "@/lib/seo"
-import { Locale } from "@/i18.config"
 
 export const dynamicParams = false
 
@@ -24,8 +23,8 @@ export async function generateStaticParams() {
     }))
 }
 
-const fetchPost = async (slug: string, lang: Locale) => {
-    const post = await getFileBySlug("library", slug, lang)
+const fetchPost = async (slug: string) => {
+    const post = await getFileBySlug("library", slug)
     return post as {
         code: string
         frontmatter: LibraryFrontmatter
@@ -33,7 +32,7 @@ const fetchPost = async (slug: string, lang: Locale) => {
 }
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-    const post = await fetchPost(props.params.slug, props.params.lang)
+    const post = await fetchPost(props.params.slug)
     const { frontmatter } = post
 
     return {
@@ -48,12 +47,11 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 interface PageProps {
     params: {
         slug: string
-        lang: Locale
     }
 }
 
 const SingleLibraryPage = async (props: PageProps) => {
-    const post = await fetchPost(props.params.slug, props.params.lang)
+    const post = await fetchPost(props.params.slug)
     const { frontmatter, code } = post
     return (
         <main className="custom-container">

@@ -18,6 +18,7 @@
         "date-fns": "^4.1.0",
         "framer-motion": "^11.11.11",
         "gray-matter": "^4.0.3",
+        "lodash": "^4.17.21",
         "mdx-bundler": "^10.0.3",
         "next": "15.0.2",
         "nextjs-toploader": "^3.7.15",
@@ -30,6 +31,7 @@
         "react-lite-youtube-embed": "^2.4.0",
         "react-loader-spinner": "^6.1.6",
         "react-tippy": "^1.4.0",
+        "react-twitter-widgets": "^1.11.0",
         "react-use": "^17.5.1",
         "reading-time": "^1.5.0",
         "rehype-autolink-headings": "^7.1.0",
@@ -40,6 +42,7 @@
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.9",
         "@tailwindcss/typography": "^0.5.15",
+        "@types/lodash": "^4.17.13",
         "@types/node": "^20",
         "@types/nprogress": "^0.2.3",
         "@types/react": "^18",
