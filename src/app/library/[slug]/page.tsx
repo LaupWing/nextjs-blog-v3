@@ -1,4 +1,4 @@
-import type { FC } from "react"
+import { Suspense, type FC } from "react"
 import type { TechListType } from "@/components/TechIcons.client"
 
 import { TechIcons } from "@/components/TechIcons.client"
@@ -11,6 +11,7 @@ import { TableContents } from "@/components/sections/TableContents.client"
 import { Metadata } from "next"
 import seo from "@/lib/seo"
 import { prisma } from "@/lib/prisma"
+import { IconEye } from "@/components/Icons"
 
 export const dynamicParams = false
 
@@ -88,7 +89,9 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
                 {frontmatter.description}
             </p>
             <div className="mt-2 flex items-center justify-start gap-3 text-sm font-medium text-gray-600 dark:text-gray-300">
-                <Test slug={frontmatter.slug} />
+                {/* <Suspense fallback={<div>...</div>}>
+                    <Test slug={frontmatter.slug} />
+                </Suspense> */}
                 {/* <Views slug={frontmatter.slug} /> */}
                 <span>•</span>
                 <TechIcons
@@ -102,19 +105,19 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
 const Test: FC<{
     slug: string
 }> = async ({ slug }) => {
-    const hi = await prisma.view.count({
+    const views = await prisma.view.count({
         where: {
             ContentMeta: {
                 slug: slug,
             },
         },
     })
-    console.log("test")
-    console.log(hi)
+    await new Promise((resolve) => setTimeout(resolve, 10000))
 
     return (
-        <div>
-            <div>test</div>
+        <div className="flex items-center gap-1">
+            <IconEye className="inline-block text-base" />
+            {views} views
         </div>
     )
 }
