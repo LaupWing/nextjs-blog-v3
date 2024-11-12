@@ -1,7 +1,7 @@
 "use client"
 import clsx from "clsx"
 import Link, { LinkProps } from "next/link"
-import { useParams, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { ComponentPropsWithRef, FC, ReactNode } from "react"
 
 export interface UnstyledLinkProps

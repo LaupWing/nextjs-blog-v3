@@ -1,8 +1,8 @@
-import { Suspense, type FC } from "react"
+import type { FC } from "react"
 import type { TechListType } from "@/components/TechIcons.client"
 
 import { TechIcons } from "@/components/TechIcons.client"
-import { Likes } from "@/components/elements/Likes.client"
+// import { Likes } from "@/components/elements/Likes.client"
 import { Views } from "@/components/elements/Views.client"
 import { getFileBySlug, getFiles } from "@/lib/mdx"
 import { LibraryFrontmatter } from "@/types/frontmatters"
@@ -10,8 +10,8 @@ import { Content } from "@/components/sections/Content.client"
 import { TableContents } from "@/components/sections/TableContents.client"
 import { Metadata } from "next"
 import seo from "@/lib/seo"
-import { prisma } from "@/lib/prisma"
-import { IconEye } from "@/components/Icons"
+// import { prisma } from "@/lib/prisma"
+// import { IconEye } from "@/components/Icons"
 
 export const dynamicParams = false
 
@@ -100,22 +100,22 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
     )
 }
 
-const Test: FC<{
-    slug: string
-}> = async ({ slug }) => {
-    const views = await prisma.view.count({
-        where: {
-            ContentMeta: {
-                slug: slug,
-            },
-        },
-    })
-    await new Promise((resolve) => setTimeout(resolve, 10000))
+// const Test: FC<{
+//     slug: string
+// }> = async ({ slug }) => {
+//     const views = await prisma.view.count({
+//         where: {
+//             ContentMeta: {
+//                 slug: slug,
+//             },
+//         },
+//     })
+//     await new Promise((resolve) => setTimeout(resolve, 10000))
 
-    return (
-        <div className="flex items-center gap-1">
-            <IconEye className="inline-block text-base" />
-            {views} views
-        </div>
-    )
-}
+//     return (
+//         <div className="flex items-center gap-1">
+//             <IconEye className="inline-block text-base" />
+//             {views} views
+//         </div>
+//     )
+// }

@@ -22,7 +22,7 @@ export const Subscribe = () => {
                 email: e.currentTarget.elements.email.value,
                 message: "New Subscriber",
                 name: "New Subscriber",
-            }),
+            })
         )
         // const res = await fetch("/api/contact", {
         //     method: "POST",

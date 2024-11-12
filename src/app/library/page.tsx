@@ -32,6 +32,7 @@ const Library = async () => {
                 Here's a collection of code snippets from various technologies
                 that I have used before. Feel free to make use of them!
             </p>
+            {/* @ts-ignore */}
             <LibraryContainer posts={posts} />
         </section>
     )

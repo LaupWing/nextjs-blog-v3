@@ -144,6 +144,7 @@ const HomeBlogs: FC = async () => {
                 </h2>
                 <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {recent_blogs.map((post) => (
+                        // @ts-ignore
                         <BlogCard key={post.slug} post={post} />
                     ))}
                 </ul>
@@ -213,6 +214,7 @@ const HomeLibrary: FC = async () => {
                 </p>
                 <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {recentLibrary.map((snippet) => (
+                        // @ts-ignore
                         <LibraryCard key={snippet.slug} snippet={snippet} />
                     ))}
                 </ul>
