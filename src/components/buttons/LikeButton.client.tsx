@@ -24,12 +24,9 @@ export const LikeButton: FC<LikeButtonProps> = ({
             setLikesByUser(_likes_by_user + 1)
             setAllLikes(_all_likes + 1)
 
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/likes/${params.slug}/user`,
-                {
-                    method: "POST",
-                }
-            )
+            const res = await fetch(`/api/likes/user?slug=${params.slug}`, {
+                method: "POST",
+            })
             const data = await res.json()
 
             if (data.message === "Max like count is 5") {
