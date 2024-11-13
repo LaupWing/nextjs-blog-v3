@@ -1,5 +1,7 @@
 import type { ContentType, PickFrontmatter } from "@/types/frontmatters"
 import { prisma } from "./prisma"
+import { NextRequest } from "next/server"
+import { createHash } from "crypto"
 
 interface OpenGraphType {
     site_name: string
@@ -80,4 +82,15 @@ export const attachContentMeta = async <T extends ContentType>(
     }
 
     return results
+}
+
+export function generateSessionId(req: NextRequest): string {
+    const ip_address = req.headers.get("x-forwarded-for") || "0.0.0.0"
+    const salt = process.env.IP_ADDRESS_SALT || "SOME_SALT"
+
+    const current_user_id = createHash("md5")
+        .update(ip_address + salt, "utf8")
+        .digest("hex")
+
+    return current_user_id
 }
