@@ -17,12 +17,9 @@ export const Likes: FC<LikesProps> = ({ slug }) => {
     const [loading, setLoading] = useState(true)
 
     const fetchLikes = async () => {
-        const res_all_likes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/likes/${slug}`,
-            {
-                method: "GET",
-            }
-        )
+        const res_all_likes = await fetch(`/api/likes?slug=${slug}`, {
+            method: "GET",
+        })
         const data_all_likes = await res_all_likes.json()
         const res_user_likes = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/likes/${slug}/user`,
