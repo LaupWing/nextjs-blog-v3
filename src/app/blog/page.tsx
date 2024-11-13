@@ -4,12 +4,11 @@ import { Accent } from "@/components/elements/Accent"
 import { attachContentMeta } from "@/lib/helpers"
 import { getAllFilesFrontmatter } from "@/lib/mdx"
 import seo from "@/lib/seo"
-import { Locale } from "@/i18.config"
 
 export const revalidate = 60
 
-const fetchBlogs = async (lang: Locale) => {
-    const blogs = await getAllFilesFrontmatter("blog", lang)
+const fetchBlogs = async () => {
+    const blogs = await getAllFilesFrontmatter("blog")
 
     return await attachContentMeta<"blog">(blogs)
 }
@@ -23,8 +22,8 @@ export const metadata: Metadata = {
     }),
 }
 
-const Blog = async ({ params: { lang } }: { params: { lang: Locale } }) => {
-    const posts = await fetchBlogs(lang)
+const Blog = async () => {
+    const posts = await fetchBlogs()
 
     return (
         <main>
@@ -38,6 +37,7 @@ const Blog = async ({ params: { lang } }: { params: { lang: Locale } }) => {
                 >
                     Interesting tech findings.
                 </p>
+                {/* @ts-ignore */}
                 <BlogsContainer posts={posts} />
             </section>
         </main>

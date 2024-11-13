@@ -1,15 +1,9 @@
 import { LoadedContainer } from "@/components/containers/LoadedContainer.client"
 
 export default function RootLayout({
-   children,
+    children,
 }: {
-   children: React.ReactNode
+    children: React.ReactNode
 }) {
-   return (
-      <LoadedContainer 
-         id="skip-nav"
-      >
-         {children}
-      </LoadedContainer>
-   )
+    return <LoadedContainer id="skip-nav">{children}</LoadedContainer>
 }
