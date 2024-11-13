@@ -12,7 +12,6 @@ import { BlogFrontmatter } from "@/types/frontmatters"
 import { format } from "date-fns"
 import { FC } from "react"
 import seo from "@/lib/seo"
-import { Locale } from "@/i18.config"
 
 export const dynamicParams = false
 
@@ -27,7 +26,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
-    const post = await fetchPost(props.params.slug, props.params.lang)
+    const { slug } = await props.params
+    const post = await fetchPost(slug)
     const { frontmatter } = post
 
     const OG_BANNER_LINK = `https://res.cloudinary.com/laupwing/image/upload/f_auto,c_fill,ar_12:8,w_1200/${frontmatter.banner}`
@@ -43,8 +43,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     }
 }
 
-const fetchPost = async (slug: string, lang: Locale) => {
-    const post = await getFileBySlug("blog", slug, lang)
+const fetchPost = async (slug: string) => {
+    const post = await getFileBySlug("blog", slug)
     return post as {
         code: string
         frontmatter: BlogFrontmatter
@@ -52,19 +52,19 @@ const fetchPost = async (slug: string, lang: Locale) => {
 }
 
 interface PageProps {
-    params: {
+    params: Promise<{
         slug: string
-        lang: Locale
-    }
+    }>
 }
 
 const SingleBlogPage = async (props: PageProps) => {
-    const post = await fetchPost(props.params.slug, props.params.lang)
+    const { slug } = await props.params
+    const post = await fetchPost(slug)
     const { frontmatter, code } = post
 
     return (
         <main className="custom-container">
-            <Hero frontmatter={frontmatter} slug={props.params.slug} />
+            <Hero frontmatter={frontmatter} slug={slug} />
             <hr className="dark:border-gray-600" />
             <section className="lg:grid pt-4 pb-8 lg:grid-cols-[auto,250px] lg:gap-8">
                 <Content code={code} />
@@ -116,7 +116,7 @@ const Hero: FC<HeroProps> = async ({ frontmatter, slug }) => {
                         Last updated{" "}
                         {format(
                             new Date(frontmatter.lastUpdated),
-                            "MMMM dd, yyyy",
+                            "MMMM dd, yyyy"
                         )}
                         .
                     </p>
