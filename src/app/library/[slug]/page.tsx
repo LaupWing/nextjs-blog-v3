@@ -1,8 +1,7 @@
 import type { FC } from "react"
 import type { TechListType } from "@/components/TechIcons.client"
-
 import { TechIcons } from "@/components/TechIcons.client"
-// import { Likes } from "@/components/elements/Likes.client"
+import { Likes } from "@/components/elements/Likes.client"
 import { Views } from "@/components/elements/Views.client"
 import { getFileBySlug, getFiles } from "@/lib/mdx"
 import { LibraryFrontmatter } from "@/types/frontmatters"
@@ -10,8 +9,6 @@ import { Content } from "@/components/sections/Content.client"
 import { TableContents } from "@/components/sections/TableContents.client"
 import { Metadata } from "next"
 import seo from "@/lib/seo"
-// import { prisma } from "@/lib/prisma"
-// import { IconEye } from "@/components/Icons"
 
 export const dynamicParams = false
 
@@ -65,7 +62,7 @@ const SingleLibraryPage = async (props: PageProps) => {
                     <div className="sticky top-24">
                         <TableContents slug={frontmatter.slug} />
                         <div className="flex items-center justify-center py-8">
-                            {/* <Likes slug={frontmatter.slug} /> */}
+                            <Likes slug={frontmatter.slug} />
                         </div>
                     </div>
                 </aside>
@@ -87,9 +84,6 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
                 {frontmatter.description}
             </p>
             <div className="mt-2 flex items-center justify-start gap-3 text-sm font-medium text-gray-600 dark:text-gray-300">
-                {/* <Suspense fallback={<div>...</div>}>
-                    <Test slug={frontmatter.slug} />
-                </Suspense> */}
                 <Views slug={frontmatter.slug} />
                 <span>•</span>
                 <TechIcons
@@ -99,23 +93,3 @@ const Hero: FC<HeroProps> = ({ frontmatter }) => {
         </div>
     )
 }
-
-// const Test: FC<{
-//     slug: string
-// }> = async ({ slug }) => {
-//     const views = await prisma.view.count({
-//         where: {
-//             ContentMeta: {
-//                 slug: slug,
-//             },
-//         },
-//     })
-//     await new Promise((resolve) => setTimeout(resolve, 10000))
-
-//     return (
-//         <div className="flex items-center gap-1">
-//             <IconEye className="inline-block text-base" />
-//             {views} views
-//         </div>
-//     )
-// }
