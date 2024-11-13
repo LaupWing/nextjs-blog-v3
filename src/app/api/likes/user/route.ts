@@ -17,6 +17,5 @@ export async function GET(request: NextRequest) {
             },
         },
     })
-    console.log(likes)
     return new Response(likes.toString())
 }
